@@ -46,8 +46,7 @@ public class SurvivorController : MonoBehaviour
 
         if (m_hitVelocity == Vector3.zero)
         {
-            Vector3 lookDirection = Vector3.RotateTowards(transform.forward, m_rigidBody.velocity, Time.deltaTime * m_angularSpeed, 0.0f);
-            m_rigidBody.rotation = Quaternion.LookRotation(lookDirection);
+            m_rigidBody.angularVelocity = Vector3.zero;
         }
         else
         {
@@ -61,6 +60,7 @@ public class SurvivorController : MonoBehaviour
 
         if (m_healthComponent.isDead)
         {
+            GameManager.Instance.SpawnManager.SpawnPouf(transform.position + Vector3.up * 1.0f);
             GameObject newZombi = GameManager.Instance.SpawnManager.SpawnZombie(transform.position, transform.rotation);
             _zombi.Swarm.AddZombie(newZombi.GetComponent<ZombiController>());
             Destroy(gameObject);
