@@ -46,3 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_sceneManager:
     m_faderPrefab: {fileID: 5511949212455005971, guid: 4cbc2b61c59025d40a3438a5ddd77eaa, type: 3}
+  m_spawnManager:
+    m_zombiePrefabs:
+    - {fileID: 707177933332136128, guid: 61637e4046a718b458d3fa66b2a47405, type: 3}
+    - {fileID: 175105992163973939, guid: db86e4cd489997843a4f6148fd3592c0, type: 3}

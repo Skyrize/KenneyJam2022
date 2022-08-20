@@ -43,7 +43,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 10
+  m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &8136427565091723229
 PrefabInstance:
@@ -52,6 +52,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3161901937012011018, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
+      propertyPath: m_Mass
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 4195542345668963361, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -377,9 +381,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_speed: 12
-  m_angularSpeed: 6
+  m_angularSpeed: 50
   m_rigidBody: {fileID: 6560390935728187351}
   m_animator: {fileID: 5391910790307072408}
+  m_avoidanceCollider: {fileID: 7186185333243994107}
   m_avoidanceCurve:
     serializedVersion: 2
     m_Curve:
@@ -404,6 +409,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  m_hitDamagePoints: 1
+  m_hitCooldownDuration: 1
 --- !u!95 &5391910790307072408 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 4195542345659473477, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
