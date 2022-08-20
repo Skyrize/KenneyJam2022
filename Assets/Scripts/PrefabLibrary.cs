@@ -13,4 +13,8 @@ public class PrefabLibrary : ScriptableObject
     public GameObject roadPrefab;
     public GameObject intersectRoadPrefab;
     public GameObject floorPrefab;
+    public Material[] roofMaterials;
+    public Material[] wallMaterials;
+    public Material[] grassMaterials;
+    public Material[] woodMaterials;
 }

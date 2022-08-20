@@ -116,6 +116,17 @@ public class CityGenerator : Generator
         Fill(grid, x+4, y+4, CellType.ROAD_INTERSECT);
     }
 
+    void GenerateFloor(int x, int y)
+    {
+        Transform floor = (PrefabUtility.InstantiatePrefab(prefabLibrary.floorPrefab, floorContainer)as GameObject).transform;
+        floor.position = transform.position + new Vector3(x*cellSize+cellSize*2.5f, 0, y*cellSize+cellSize*2.5f);
+        MeshRenderer meshRenderer = floor.GetComponent<MeshRenderer>();
+        Material[] materials = meshRenderer.sharedMaterials;
+        Material randomFloorMat = prefabLibrary.grassMaterials[Random.Range(0, prefabLibrary.grassMaterials.Length)];
+        materials[0] = randomFloorMat;
+        meshRenderer.sharedMaterials = materials;
+    }
+
     void FillBasic(Cell[,] grid)
     {
         for (int x = 0; x != citySize.x; x++)
@@ -126,10 +137,9 @@ public class CityGenerator : Generator
                 {
                     FillBasicBlock(grid, x, y);
                 }
-                if (x % 10 == 0 && y % 10 == 0)
+                if (x % 5 == 0 && y % 5 == 0)
                 {
-                    Transform floor = (PrefabUtility.InstantiatePrefab(prefabLibrary.floorPrefab, floorContainer)as GameObject).transform;
-                    floor.position = transform.position + new Vector3(x*cellSize+cellSize*5, 0, y*cellSize+cellSize*5);
+                    GenerateFloor(x, y);
                 }
             }
         }

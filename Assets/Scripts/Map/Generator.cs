@@ -9,14 +9,24 @@ public abstract class Generator : MonoBehaviour
     public abstract void Clean();
     public PrefabLibrary prefabLibrary;
 
-    public Transform GenerateRandomInRange(Transform container, GameObject[] prefabs, Vector2 placementRange, Vector2 basePos)
+    public void PlaceInRange(Transform target, Vector2 placementRange, Vector2 basePos)
     {
-        int randomPrefabIndex = Random.Range(0, prefabs.Length);
         float randomPosX = Random.Range(-placementRange.x / 2f, placementRange.x / 2f);
         float randomPosZ = Random.Range(-placementRange.y / 2f, placementRange.y / 2f);
         Vector3 randomPos = new Vector3(basePos.x + randomPosX, 0, basePos.y + randomPosZ);
-        Transform generated = (PrefabUtility.InstantiatePrefab(prefabs[randomPrefabIndex], container) as GameObject).transform;
-        generated.localPosition = randomPos;
+        target.localPosition = randomPos;
+    }
+
+    public Transform GenerateInRange(Transform container, GameObject prefabs, Vector2 placementRange, Vector2 basePos)
+    {
+        Transform generated = (PrefabUtility.InstantiatePrefab(prefabs, container) as GameObject).transform;
+        PlaceInRange(generated, placementRange, basePos);
         return generated;
+    }
+
+    public Transform GenerateRandomInRange(Transform container, GameObject[] prefabs, Vector2 placementRange, Vector2 basePos)
+    {
+        int randomPrefabIndex = Random.Range(0, prefabs.Length);
+        return GenerateInRange(container, prefabs[randomPrefabIndex], placementRange, basePos);
     }
 }
