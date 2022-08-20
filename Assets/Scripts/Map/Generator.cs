@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public abstract class Generator : MonoBehaviour
 {
+#if UNITY_EDITOR
+
     public abstract void Generate();
     public abstract void Clean();
     public PrefabLibrary prefabLibrary;
@@ -19,4 +24,6 @@ public abstract class Generator : MonoBehaviour
         generated.localPosition = randomPos;
         return generated;
     }
+
+#endif
 }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if UNITY_EDITOR
 using UnityEditor;
 
 public enum CellType
@@ -15,9 +17,12 @@ struct Cell
 {
     public bool isOccupied;
 }
+#endif
 
 public class CityGenerator : Generator
 {
+#if UNITY_EDITOR
+
     public float cellSize = 20;
     public Vector2Int citySize = new Vector2Int(20, 20);
     public HouseGenerator houseGenerator;
@@ -152,4 +157,6 @@ public class CityGenerator : Generator
         Cell[,] grid = new Cell[citySize.x, citySize.y];
         FillBasic(grid);
     }
+
+#endif
 }

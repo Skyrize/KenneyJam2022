@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public class HouseGenerator : Generator
 {
+#if UNITY_EDITOR
+
     public Vector2 size = new Vector2(3, 2);
     public Vector2 housePlacementPos = new Vector2(-0.5f, 0.1f);
     public Vector2 housePlacementRange = new Vector2(3, 0.5f);
@@ -78,4 +83,6 @@ public class HouseGenerator : Generator
         Gizmos.DrawWireCube(Vector3.left * fencePlacementDist, new Vector3(2f, 20, size.x));
         Gizmos.DrawWireCube(-Vector3.left * fencePlacementDist, new Vector3(2f, 20, size.x));
     }
+
+#endif
 }
