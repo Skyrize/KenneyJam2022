@@ -110,10 +110,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6762bc026e31d68448b089f1e7c78390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cellSize: 20
   citySize: {x: 20, y: 20}
   houseGenerator: {fileID: 8540663960472315116}
-  roadPrefab: {fileID: 919132149155446097, guid: 6e8412e8fdb546143be42be41ef3bfbd, type: 3}
-  intersectRoadPrefab: {fileID: 919132149155446097, guid: 6a2e7a46faba9754daf7a829c3548389, type: 3}
+  roadPrefab: {fileID: 463733719428636602, guid: ebfae72d9f38c404eaaa98023f455863, type: 3}
+  intersectRoadPrefab: {fileID: 9159804167809615826, guid: 76083e495aef9ce4ca8d1dd4f3a5a8c8, type: 3}
   floorPrefab: {fileID: 6965118010420886735, guid: 80a96802d01ef3e42abd3c3a0dff4b14, type: 3}
   roadContainer: {fileID: 8540663961816201914}
   floorContainer: {fileID: 5626700257407738579}
@@ -161,15 +162,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 509a5cefc085c3146b95899f93910308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 2, y: 2}
-  housePlacementPos: {x: -0.1, y: 0.1}
-  housePlacementRange: {x: 0.37, y: 0.18}
-  decorPlacementPos: {x: 0, y: -0.55}
-  decorPlacementRange: {x: 1.5, y: 0.5}
+  size: {x: 40, y: 40}
+  housePlacementPos: {x: -2, y: 2}
+  housePlacementRange: {x: 10.14, y: 4.31}
+  decorPlacementPos: {x: 0, y: -11}
+  decorPlacementRange: {x: 30, y: 10}
   minDecorAmount: 1
   maxDecorAmount: 3
   fencePrefab: {fileID: 2042179140263269778, guid: 99f0ded6bf7b34b458bbdd0f897625f6, type: 3}
-  fencePlacementDist: 0.75
+  fencePlacementDist: 15
   housePrefabs:
   - {fileID: 6577162370407207733, guid: 0dcb053bcdb52ca49bc0867bcd1821b3, type: 3}
   - {fileID: 2439882499749895100, guid: 0521d0782fa1b874482cdd0c5bcd9330, type: 3}

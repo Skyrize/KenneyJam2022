@@ -53,7 +53,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b671ad150d4e6d6428a015b73e05ddb2, type: 3}
       propertyPath: m_Name
-      value: house_type13
+      value: house_type13 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b671ad150d4e6d6428a015b73e05ddb2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b671ad150d4e6d6428a015b73e05ddb2, type: 3}

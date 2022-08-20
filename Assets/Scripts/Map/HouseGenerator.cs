@@ -77,22 +77,22 @@ public class HouseGenerator : Generator
         Gizmos.color = Color.green;
         Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
         Gizmos.matrix = rotationMatrix; 
-        Vector3 debugSize = new Vector3(size.x, 3, size.y);
+        Vector3 debugSize = new Vector3(size.x, 20, size.y);
         Gizmos.DrawWireCube(Vector3.zero, debugSize);
 
         //Draw house placement
         Gizmos.color = Color.red;
-        debugSize = new Vector3(housePlacementRange.x, 2, housePlacementRange.y);
+        debugSize = new Vector3(housePlacementRange.x, 20, housePlacementRange.y);
         Gizmos.DrawWireCube(new Vector3(housePlacementPos.x, 0, housePlacementPos.y), debugSize);
 
         //Draw decor placement
         Gizmos.color = Color.yellow;
-        debugSize = new Vector3(decorPlacementRange.x, 2, decorPlacementRange.y);
+        debugSize = new Vector3(decorPlacementRange.x, 20, decorPlacementRange.y);
         Gizmos.DrawWireCube(new Vector3(decorPlacementPos.x, 0, decorPlacementPos.y), debugSize);
 
         //Draw fence placement
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireCube(Vector3.left * fencePlacementDist, new Vector3(0.2f, 2, size.x));
-        Gizmos.DrawWireCube(-Vector3.left * fencePlacementDist, new Vector3(0.2f, 2, size.x));
+        Gizmos.DrawWireCube(Vector3.left * fencePlacementDist, new Vector3(2f, 20, size.x));
+        Gizmos.DrawWireCube(-Vector3.left * fencePlacementDist, new Vector3(2f, 20, size.x));
     }
 }
