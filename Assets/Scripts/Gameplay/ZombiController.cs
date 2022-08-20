@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ZombiController : MonoBehaviour
 {
-    [SerializeField] private float m_speed = 2.0f;
+    [SerializeField] private float m_baseSpeed = 2.0f;
+    public float Speed => Swarm ? Swarm.m_speed : m_baseSpeed;
     [SerializeField] private float m_minSpeed = 0.2f;
     [SerializeField] private float m_angularSpeed = 2.0f;
     [SerializeField] private Rigidbody m_rigidBody;
@@ -61,9 +62,9 @@ public class ZombiController : MonoBehaviour
     private void UpdateVelocity(Vector3 _heading, Vector3 _avoidance)
     {
         Vector3 currentVelocity = m_rigidBody.velocity;
-        float headingRatio = _heading.magnitude / m_speed;
+        float headingRatio = _heading.magnitude / Speed;
         //m_desiredVelocity = Vector3.ClampMagnitude(currentVelocity.normalized * 0.0f + _heading * headingRatio + _avoidance.normalized * (1.0f - headingRatio), 1.0f) * m_speed;
-        m_desiredVelocity = Vector3.ClampMagnitude(_heading + _avoidance, 1.0f) * m_speed;
+        m_desiredVelocity = Vector3.ClampMagnitude(_heading + _avoidance, 1.0f) * Speed;
     }
 
     private void ApplyVelocity()
@@ -89,7 +90,7 @@ public class ZombiController : MonoBehaviour
         float speed = m_rigidBody.velocity.magnitude;
         bool isRunning = m_rigidBody.velocity.sqrMagnitude >= m_minSpeed * m_minSpeed;
         m_animator.SetBool("IsRunning", isRunning);
-        m_animator.speed = isRunning ? Mathf.Lerp(0.3f, 1.0f, Mathf.Min(speed, m_speed) / m_speed) : 1.0f;
+        m_animator.speed = isRunning ? Mathf.Lerp(0.3f, 1.0f, Mathf.Min(speed, Speed) / Speed) : 1.0f;
     }
 
     private void OnTriggerEnter(Collider _other)
