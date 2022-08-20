@@ -5,7 +5,7 @@ using UnityEngine;
 public class ZombiController : MonoBehaviour
 {
     [SerializeField] private float m_baseSpeed = 2.0f;
-    public float Speed => Swarm ? Swarm.m_speed : m_baseSpeed;
+    public float Speed => Swarm ? Swarm.Speed : m_baseSpeed;
     [SerializeField] private float m_minSpeed = 0.2f;
     [SerializeField] private float m_angularSpeed = 2.0f;
     [SerializeField] private Rigidbody m_rigidBody;

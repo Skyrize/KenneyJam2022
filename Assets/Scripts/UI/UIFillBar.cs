@@ -11,16 +11,11 @@ public class UIFillBar : MonoBehaviour
     [SerializeField] private Gradient gradient;
     [SerializeField] private float decreaseSpeed = 0.3f;
     [SerializeField] private Ease decreaseEase = Ease.OutQuint;
-    Image image;
-    // Start is called before the first frame update
-    void Start()
-    {
-        image = GetComponent<Image>();
-        image.color = gradient.Evaluate(1);
-    }
+    [SerializeField] private Image image;
 
     public void SetFill(float _amount)
     {
+        Debug.Log("Fill " + _amount);
         image.color = gradient.Evaluate(_amount);
         image.DOFillAmount(_amount, decreaseSpeed).SetEase(decreaseEase);
     }
