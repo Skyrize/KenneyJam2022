@@ -122,6 +122,7 @@ public class ZombiController : MonoBehaviour
             if (survivor)
             {
                 survivor.Hit(this, m_hitDamagePoints);
+                GameManager.Instance.AudioComponent.Play("Punch");
                 m_hitCooldownTimer.Restart();
                 return;
             }

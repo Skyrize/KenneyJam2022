@@ -65,7 +65,7 @@ public class AudioComponent : MonoBehaviour
 
     public void PlayWithCooldown(string _audioName)
     {
-        if (!m_isOnCooldown)
+        if (m_isOnCooldown)
             return;
         Audio audio = m_audios.Find((a) => a.name == _audioName);
 
