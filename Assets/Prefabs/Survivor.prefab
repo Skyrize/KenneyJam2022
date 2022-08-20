@@ -70,6 +70,11 @@ Rigidbody:
   m_CorrespondingSourceObject: {fileID: 3161901937012011018, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
   m_PrefabInstance: {fileID: 3121327592135371832}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1254429932159693437 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4195542345659473477, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
+  m_PrefabInstance: {fileID: 3121327592135371832}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5024898960846965739 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7993088975945983955, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
@@ -94,6 +99,9 @@ MonoBehaviour:
   m_detectionMask:
     serializedVersion: 2
     m_Bits: 128
+  m_angularSpeed: 6
+  m_minSpeed: 0.2
+  m_animator: {fileID: 1254429932159693437}
   m_runSpeed: 3
   m_walkSpeed: 1
   m_desiredVelocity: {x: 0, y: 0, z: 0}

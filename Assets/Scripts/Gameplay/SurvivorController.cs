@@ -142,6 +142,9 @@ public class SurvivorController : MonoBehaviour
     [SerializeField] private Behavior.Type m_behavior;
     [SerializeField] private float m_detectionRadius = 20f;
     [SerializeField] private LayerMask m_detectionMask;
+    [SerializeField] private float m_angularSpeed = 2.0f;
+    [SerializeField] private float m_minSpeed = 0.2f;
+    [SerializeField] private Animator m_animator;
     public float m_runSpeed = 3;
     public float m_walkSpeed = 1;
 
@@ -227,17 +230,36 @@ public class SurvivorController : MonoBehaviour
         }
     }
 
+    private void UpdateAnimation()
+    {
+        float speed = m_rigidBody.velocity.magnitude;
+        bool isRunning = m_rigidBody.velocity.sqrMagnitude >= m_minSpeed * m_minSpeed;
+        m_animator.SetBool("IsRunning", isRunning);
+        m_animator.speed = Mathf.Lerp(0.3f, 1.0f, Mathf.Min(speed, m_runSpeed) / m_runSpeed);
+    }
+
     private void ApplyVelocity()
     {
-        m_rigidBody.velocity = m_desiredVelocity + m_hitVelocity;
 
-        if (m_hitVelocity == Vector3.zero)
+        if (m_hitVelocity != Vector3.zero)
         {
-            m_rigidBody.angularVelocity = Vector3.zero;
-        }
-        else
-        {
+            m_rigidBody.velocity = m_hitVelocity;
             m_rigidBody.rotation = Quaternion.LookRotation(-m_hitVelocity.normalized);
+            m_animator.SetBool("IsRunning", false);
+        }
+        else if (m_desiredVelocity != Vector3.zero)
+        {
+            m_rigidBody.velocity = m_desiredVelocity;
+            Vector3 direction = Vector3.RotateTowards(transform.forward, m_desiredVelocity, Time.deltaTime * m_angularSpeed, 0.0f);
+            direction.y = transform.position.y;
+            m_rigidBody.rotation = Quaternion.LookRotation(direction);
+            m_rigidBody.angularVelocity = Vector3.zero;
+            UpdateAnimation();
+        }
+        else if (m_rigidBody.velocity != Vector3.zero)
+        {
+            m_rigidBody.velocity = Vector3.zero;
+            UpdateAnimation();
         }
     }
 
@@ -247,6 +269,8 @@ public class SurvivorController : MonoBehaviour
         hitDirection.y = 0.0f;
         m_hitVelocity = hitDirection * 10.0f;
         m_rigidBody.rotation = Quaternion.LookRotation(-hitDirection);
+        m_runSpeed /= 1.5f;
+        m_walkSpeed /= 1.5f;
     }
 
     private void OnDeath()
