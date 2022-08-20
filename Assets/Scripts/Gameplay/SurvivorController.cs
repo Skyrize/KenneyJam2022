@@ -269,8 +269,8 @@ public class SurvivorController : MonoBehaviour
         hitDirection.y = 0.0f;
         m_hitVelocity = hitDirection * 10.0f;
         m_rigidBody.rotation = Quaternion.LookRotation(-hitDirection);
-        m_runSpeed /= 1.5f;
-        m_walkSpeed /= 1.5f;
+        m_runSpeed /= 4f;
+        m_walkSpeed /= 4f;
     }
 
     private void OnDeath()
