@@ -24,7 +24,7 @@ public class SwarmController : MonoBehaviour
             int prefabIndex = Random.Range(0, m_zombiePrefabs.Count);
             GameObject zombi = Instantiate(m_zombiePrefabs[prefabIndex], m_zombiPool.transform);
             Vector2 spawnPosition2D = Random.insideUnitCircle * spawnRadius;
-            zombi.transform.position = new Vector3(spawnPosition2D.x, 0.0f, spawnPosition2D.y);
+            zombi.transform.position = new Vector3(transform.position.x + spawnPosition2D.x, 0.0f, transform.position.z + spawnPosition2D.y);
             zombi.GetComponent<ZombiController>().Swarm = this;
             m_zombies.Add(zombi);
         }
