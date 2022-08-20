@@ -18,15 +18,34 @@ public class ZombiController : MonoBehaviour
 
     private List<ZombiController> m_nearZombies = new List<ZombiController>(10);
     private Vector3 m_desiredVelocity;
+    private Timer m_waitTimer = new Timer();
+    private float m_waitDuration = 0.0f;
     private Timer m_hitCooldownTimer = new Timer();
+
+    public void Wait(float _duration)
+    {
+        m_waitDuration = _duration;
+        m_waitTimer.Restart();
+    }
 
     private void Update()
     {
         if (Swarm)
         {
-            Vector3 heading = ComputeHeading();
-            Vector3 avoidance = ComputeAvoidance();
-            UpdateVelocity(heading, avoidance);
+            if (m_waitTimer.IsStarted)
+            {
+                if (m_waitTimer.ElapsedTime >= m_waitDuration)
+                    m_waitTimer.Stop();
+
+                m_desiredVelocity = Vector3.zero;
+            }
+            else
+            {
+                Vector3 heading = ComputeHeading();
+                Vector3 avoidance = ComputeAvoidance();
+                UpdateVelocity(heading, avoidance);
+            }
+
             ApplyVelocity();
         }
     }
@@ -121,8 +140,11 @@ public class ZombiController : MonoBehaviour
             SurvivorController survivor = _collision.gameObject.GetComponent<SurvivorController>();
             if (survivor)
             {
-                survivor.Hit(this, m_hitDamagePoints);
+                Vector3 hitPosition = _collision.contacts[0].point;
+                hitPosition.y = 2.0f;
+                GameManager.Instance.SpawnManager.SpawnHit(hitPosition);
                 GameManager.Instance.AudioComponent.Play("Punch");
+                survivor.Hit(this, m_hitDamagePoints);
                 m_hitCooldownTimer.Restart();
                 return;
             }

@@ -61,8 +61,9 @@ public class SurvivorController : MonoBehaviour
         {
             GameManager.Instance.AudioComponent.Play("Transform");
             GameManager.Instance.SpawnManager.SpawnPouf(transform.position + Vector3.up * 1.0f);
-            GameObject newZombi = GameManager.Instance.SpawnManager.SpawnZombie(transform.position, transform.rotation);
-            _zombi.Swarm.AddZombie(newZombi.GetComponent<ZombiController>());
+            ZombiController newZombie = GameManager.Instance.SpawnManager.SpawnZombie(transform.position, transform.rotation).GetComponent<ZombiController>();
+            newZombie.Wait(0.6f);
+            _zombi.Swarm.AddZombie(newZombie);
             Destroy(gameObject);
         }
         else

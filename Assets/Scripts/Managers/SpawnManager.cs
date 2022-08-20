@@ -8,6 +8,7 @@ public class SpawnManager
 {
     [SerializeField] private List<GameObject> m_zombiePrefabs;
     [SerializeField] private GameObject m_fxPoufPrefab;
+    [SerializeField] private GameObject m_fxHitPrefab;
 
     public GameObject SpawnZombie(Vector3 _position, Quaternion _rotation)
     {
@@ -17,7 +18,11 @@ public class SpawnManager
 
     public GameObject SpawnPouf(Vector3 _position)
     {
-        int prefabIndex = UnityEngine.Random.Range(0, m_zombiePrefabs.Count);
         return GameObject.Instantiate(m_fxPoufPrefab, _position, Quaternion.identity);
+    }
+
+    public GameObject SpawnHit(Vector3 _position)
+    {
+        return GameObject.Instantiate(m_fxHitPrefab, _position, Quaternion.identity);
     }
 }
