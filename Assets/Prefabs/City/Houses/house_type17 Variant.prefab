@@ -57,7 +57,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 84c96c1cd7467a342a68d9254c600681, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84c96c1cd7467a342a68d9254c600681, type: 3}
@@ -79,19 +79,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 8.120583, y: 22.749998, z: 8.162754}
   m_Center: {x: 9, y: 11.374999, z: 2}
---- !u!65 &7097634490720790598
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3316055004173469884}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 8.120583, y: 22.749998, z: 20.162754}
-  m_Center: {x: 1, y: 11.374999, z: 0}
 --- !u!65 &4132319804401023265
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -118,3 +105,55 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.0329819, y: 22.749998, z: 1.949997}
   m_Center: {x: -10.0438, y: 11.374999, z: 9.106379}
+--- !u!65 &7097634490720790598
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3316055004173469884}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 8.120583, y: 22.749998, z: 20.162754}
+  m_Center: {x: 1, y: 11.374999, z: 0}
+--- !u!114 &-4166022195419505457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3316055004173469884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6010dd690c8c9254ea5cccf2c04a2166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_currentHealth: 100
+  m_maxHealth: 100
+  onHealEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  onDamageEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  onHealthRatioChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3337469220374337095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3316055004173469884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc965bc3e9abed34597529ce8e42e509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_height: 20
