@@ -15,7 +15,6 @@ public class UIFillBar : MonoBehaviour
 
     public void SetFill(float _amount)
     {
-        Debug.Log("Fill " + _amount);
         image.color = gradient.Evaluate(_amount);
         image.DOFillAmount(_amount, decreaseSpeed).SetEase(decreaseEase);
     }

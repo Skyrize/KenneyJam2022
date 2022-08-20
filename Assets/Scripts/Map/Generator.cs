@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public abstract class Generator : MonoBehaviour
 {
+#if UNITY_EDITOR
+
     public abstract void Generate();
     public abstract void Clean();
     public PrefabLibrary prefabLibrary;
@@ -29,4 +34,5 @@ public abstract class Generator : MonoBehaviour
         int randomPrefabIndex = Random.Range(0, prefabs.Length);
         return GenerateInRange(container, prefabs[randomPrefabIndex], placementRange, basePos);
     }
+#endif
 }
