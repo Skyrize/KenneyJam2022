@@ -1,0 +1,229 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1850829570184306765
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5626700257407738579}
+  m_Layer: 0
+  m_Name: Floors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5626700257407738579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850829570184306765}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8540663960114229808}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8540663960050622029
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8540663960050622030}
+  m_Layer: 0
+  m_Name: Houses
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8540663960050622030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8540663960050622029}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8540663960114229808}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8540663960114229822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8540663960114229808}
+  - component: {fileID: 8540663960114229823}
+  m_Layer: 0
+  m_Name: CityGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8540663960114229808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8540663960114229822}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8540663961816201914}
+  - {fileID: 8540663960050622030}
+  - {fileID: 8540663960472315117}
+  - {fileID: 5626700257407738579}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8540663960114229823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8540663960114229822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6762bc026e31d68448b089f1e7c78390, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  citySize: {x: 20, y: 20}
+  houseGenerator: {fileID: 8540663960472315116}
+  roadPrefab: {fileID: 919132149155446097, guid: 6e8412e8fdb546143be42be41ef3bfbd, type: 3}
+  intersectRoadPrefab: {fileID: 919132149155446097, guid: 6a2e7a46faba9754daf7a829c3548389, type: 3}
+  floorPrefab: {fileID: 6965118010420886735, guid: 80a96802d01ef3e42abd3c3a0dff4b14, type: 3}
+  roadContainer: {fileID: 8540663961816201914}
+  floorContainer: {fileID: 5626700257407738579}
+--- !u!1 &8540663960472315115
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8540663960472315117}
+  - component: {fileID: 8540663960472315116}
+  m_Layer: 0
+  m_Name: HouseGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8540663960472315117
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8540663960472315115}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8540663960114229808}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8540663960472315116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8540663960472315115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 509a5cefc085c3146b95899f93910308, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: {x: 2, y: 2}
+  housePlacementPos: {x: -0.1, y: 0.1}
+  housePlacementRange: {x: 0.37, y: 0.18}
+  decorPlacementPos: {x: 0, y: -0.55}
+  decorPlacementRange: {x: 1.5, y: 0.5}
+  minDecorAmount: 1
+  maxDecorAmount: 3
+  fencePrefab: {fileID: 919132149155446097, guid: c68e51eb79e185342839d8fbf3ed28eb, type: 3}
+  fencePlacementDist: 0.75
+  housePrefabs:
+  - {fileID: 919132149155446097, guid: fe2fb3b9e1bc4194da9a3dd284fb0928, type: 3}
+  - {fileID: 919132149155446097, guid: 75f284c57340fb1449044e88df957361, type: 3}
+  - {fileID: 919132149155446097, guid: 1fe31d544aa959a40a1ab8835f262b22, type: 3}
+  - {fileID: 919132149155446097, guid: a7df389cac8f54a4a8ee4f13e8afb78f, type: 3}
+  - {fileID: 919132149155446097, guid: 2b37c4b4f6dcaca49bf78ba4b0f660e2, type: 3}
+  - {fileID: 919132149155446097, guid: 81321cc0da3c4cf4e9ed32aab0ce2a89, type: 3}
+  - {fileID: 919132149155446097, guid: 096f981320c92804288372c7fb819aaf, type: 3}
+  - {fileID: 919132149155446097, guid: cb8561a1775c8ad43bb2c0a6704b6a2f, type: 3}
+  - {fileID: 919132149155446097, guid: f74d851023357854285087c77219b1cf, type: 3}
+  - {fileID: 919132149155446097, guid: a62525596237e2a49a2f255aa4086808, type: 3}
+  - {fileID: 919132149155446097, guid: bb2f19b0701c7dc488e63cd7b1db69ad, type: 3}
+  - {fileID: 919132149155446097, guid: 101114e0e324d2d4fb0692a86ce37ca4, type: 3}
+  - {fileID: 919132149155446097, guid: b671ad150d4e6d6428a015b73e05ddb2, type: 3}
+  - {fileID: 919132149155446097, guid: 0aef38fdcd1cca440a1620c8cdc975ff, type: 3}
+  - {fileID: 919132149155446097, guid: 229b983c9cd7c684cbd289af300bae5d, type: 3}
+  - {fileID: 919132149155446097, guid: 7f7406e22d8f4e642befcc1588e97a90, type: 3}
+  - {fileID: 919132149155446097, guid: 84c96c1cd7467a342a68d9254c600681, type: 3}
+  - {fileID: 919132149155446097, guid: 67745413bd8743a4f8fd8a146653c402, type: 3}
+  - {fileID: 919132149155446097, guid: f0e261da8ff2b9345a9cd230657f1933, type: 3}
+  - {fileID: 919132149155446097, guid: 7c79cfd218bec0d47ac3394c9f57f307, type: 3}
+  - {fileID: 919132149155446097, guid: 1813a4e7ce66a9c4fa0fb806a331c469, type: 3}
+  decorationPrefabs:
+  - {fileID: 919132149155446097, guid: 426c87f018f6dd24face3daef8fa3e2b, type: 3}
+  - {fileID: 919132149155446097, guid: 5af1d423dc6e8ff4298f96010b1c8666, type: 3}
+  housesContainer: {fileID: 8540663960050622030}
+--- !u!1 &8540663961816201913
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8540663961816201914}
+  m_Layer: 0
+  m_Name: Roads
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8540663961816201914
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8540663961816201913}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8540663960114229808}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
