@@ -110,11 +110,14 @@ public class CowardBehavior : Behavior
 
     public override void Update()
     {
-        Transform detectedTarget = m_controller.DetectClosestTarget();
-        if (detectedTarget)
+        if (!m_fleeAction.m_target)
         {
-            m_currentAction = m_fleeAction;
-            m_fleeAction.m_target = detectedTarget;
+            Transform detectedTarget = m_controller.DetectClosestTarget();
+            if (detectedTarget)
+            {
+                m_currentAction = m_fleeAction;
+                m_fleeAction.m_target = detectedTarget;
+            }
         }
         if (m_currentAction.Process())
         {
@@ -158,7 +161,7 @@ public class SurvivorController : MonoBehaviour
 
     public Transform DetectClosestTarget()
     {
-        int nbHits = Physics.OverlapSphereNonAlloc(transform.position, m_detectionRadius, detectionTargets, m_detectionMask);
+        int nbHits = Physics.OverlapSphereNonAlloc(transform.position + transform.forward * (m_detectionRadius - 1f), m_detectionRadius, detectionTargets, m_detectionMask);
         Transform targetDetected = null;
 
         for (int i = 0; i != nbHits; i++)
@@ -257,6 +260,6 @@ public class SurvivorController : MonoBehaviour
 
     private void OnDrawGizmosSelected() {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, m_detectionRadius);
+        Gizmos.DrawWireSphere(transform.position + transform.forward * (m_detectionRadius - 1f), m_detectionRadius);
     }
 }
