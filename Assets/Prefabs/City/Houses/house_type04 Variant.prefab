@@ -57,7 +57,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a7df389cac8f54a4a8ee4f13e8afb78f, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7df389cac8f54a4a8ee4f13e8afb78f, type: 3}
@@ -79,3 +79,42 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 23.727598, y: 14.749999, z: 16.319998}
   m_Center: {x: 12.863799, y: 7.3749995, z: 9.159999}
+--- !u!114 &-5048773872522444032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5480026672628855612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc965bc3e9abed34597529ce8e42e509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_height: 20
+--- !u!114 &2058435789192344414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5480026672628855612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6010dd690c8c9254ea5cccf2c04a2166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_currentHealth: 100
+  m_maxHealth: 100
+  onHealEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  onDamageEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  onHealthRatioChanged:
+    m_PersistentCalls:
+      m_Calls: []

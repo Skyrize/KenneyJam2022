@@ -72,7 +72,9 @@ public class ZombiController : MonoBehaviour
             Vector3 deltaPos = transform.position - zombi.transform.position;
             deltaPos.y = 0.0f;
             float deltaNorm = deltaPos.magnitude;
-            avoidance += deltaPos / deltaNorm * m_avoidanceCurve.Evaluate(1 - (deltaNorm / m_avoidanceCollider.radius));
+            float avoidanceFactor = m_avoidanceCurve.Evaluate(1 - (deltaNorm / m_avoidanceCollider.radius));
+            if (avoidanceFactor > Mathf.Epsilon)
+                avoidance += deltaPos / deltaNorm * avoidanceFactor;
         }
 
         return avoidance;
@@ -143,19 +145,20 @@ public class ZombiController : MonoBehaviour
                 if (healthComponent)
                 {
                     healthComponent.ReduceHealth(m_hitDamagePoints);
+                    
+                    Vector3 hitPosition = _collision.contacts[0].point;
+                    hitPosition.y = 2.0f;
+                    GameManager.Instance.SpawnManager.SpawnHit(hitPosition);
+                    GameManager.Instance.AudioComponent.Play("Punch");
+
+                    m_hitCooldownTimer.Restart();
                 }
             }
             {
                 SurvivorController survivor = _collision.gameObject.GetComponent<SurvivorController>();
                 if (survivor)
                 {
-                    Vector3 hitPosition = _collision.contacts[0].point;
-                    hitPosition.y = 2.0f;
-                    GameManager.Instance.SpawnManager.SpawnHit(hitPosition);
-                    GameManager.Instance.AudioComponent.Play("Punch");
                     survivor.Hit(this);
-                    m_hitCooldownTimer.Restart();
-                    return;
                 }
             }
         }
