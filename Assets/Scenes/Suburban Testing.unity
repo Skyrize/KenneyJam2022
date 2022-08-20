@@ -283,7 +283,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8505430544100624210, guid: 38a691b22f2c1e0438838d6fefd5407e, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8505430544100624210, guid: 38a691b22f2c1e0438838d6fefd5407e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -328,10 +328,6 @@ PrefabInstance:
     - target: {fileID: 8505430544100624211, guid: 38a691b22f2c1e0438838d6fefd5407e, type: 3}
       propertyPath: m_Name
       value: PlayerController
-      objectReference: {fileID: 0}
-    - target: {fileID: 8550338513531335956, guid: 38a691b22f2c1e0438838d6fefd5407e, type: 3}
-      propertyPath: m_initialSize
-      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38a691b22f2c1e0438838d6fefd5407e, type: 3}
@@ -389,22 +385,6 @@ PrefabInstance:
     - target: {fileID: 8540663960114229822, guid: a783a1dab71570048b554f1c19037b33, type: 3}
       propertyPath: m_Name
       value: City
-      objectReference: {fileID: 0}
-    - target: {fileID: 8540663960114229823, guid: a783a1dab71570048b554f1c19037b33, type: 3}
-      propertyPath: citySize.x
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 8540663960114229823, guid: a783a1dab71570048b554f1c19037b33, type: 3}
-      propertyPath: citySize.y
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 8540663960472315117, guid: a783a1dab71570048b554f1c19037b33, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8540663960472315117, guid: a783a1dab71570048b554f1c19037b33, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a783a1dab71570048b554f1c19037b33, type: 3}

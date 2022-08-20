@@ -12,37 +12,15 @@ public class HouseGenerator : Generator
     public Vector2 decorPlacementRange = new Vector2(3, 0.5f);
     public int minDecorAmount = 1;
     public int maxDecorAmount = 3;
-    public GameObject fencePrefab;
     public float fencePlacementDist = 1.5f;
-    public GameObject[] housePrefabs;
-    public GameObject[] decorationPrefabs;
+    public int minSurvivorAmount = 1;
+    public int maxSurvivorAmount = 3;
 
     public Transform housesContainer;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public override void Clean()
     {
         housesContainer.DestroyChilds();
-    }
-
-    public void GenerateRandomInRange(Transform container, GameObject[] prefabs, Vector2 placementRange, Vector2 basePos)
-    {
-        int randomPrefabIndex = Random.Range(0, prefabs.Length);
-        float randomPosX = Random.Range(-placementRange.x / 2f, placementRange.x / 2f);
-        float randomPosZ = Random.Range(-placementRange.y / 2f, placementRange.y / 2f);
-        Vector3 randomPos = new Vector3(basePos.x + randomPosX, 0, basePos.y + randomPosZ);
-        Transform generated = (PrefabUtility.InstantiatePrefab(prefabs[randomPrefabIndex], container) as GameObject).transform;
-        generated.localPosition = randomPos;
     }
 
     public override void Generate()
@@ -53,22 +31,27 @@ public class HouseGenerator : Generator
         houseContainer.parent = housesContainer;
 
         //Place house
-        GenerateRandomInRange(houseContainer, housePrefabs, housePlacementRange, housePlacementPos);
+        GenerateRandomInRange(houseContainer, prefabLibrary.housePrefabs, housePlacementRange, housePlacementPos);
 
         //Place Fences
-        Transform fenceLeft = (PrefabUtility.InstantiatePrefab(fencePrefab, houseContainer) as GameObject).transform;
+        Transform fenceLeft = (PrefabUtility.InstantiatePrefab(prefabLibrary.fencePrefab, houseContainer) as GameObject).transform;
         fenceLeft.localEulerAngles = new Vector3(0, -90, 0);
         fenceLeft.localPosition = Vector3.left * fencePlacementDist;
 
-        Transform fenceRight = (PrefabUtility.InstantiatePrefab(fencePrefab, houseContainer) as GameObject).transform;
+        Transform fenceRight = (PrefabUtility.InstantiatePrefab(prefabLibrary.fencePrefab, houseContainer) as GameObject).transform;
         fenceRight.localEulerAngles = new Vector3(0, 90, 0);
         fenceRight.localPosition = Vector3.right * fencePlacementDist;
 
-        //Place Decors
+        //Place Decors and Survivors
         int randomDecorAmount = Random.Range(minDecorAmount, maxDecorAmount + 1);
         for (int i = 0; i != randomDecorAmount; i++)
         {
-            GenerateRandomInRange(houseContainer, decorationPrefabs, decorPlacementRange, decorPlacementPos);
+            GenerateRandomInRange(houseContainer, prefabLibrary.decorationPrefabs, decorPlacementRange, decorPlacementPos);
+        }
+        int randomSurvivorAmount = Random.Range(minSurvivorAmount, maxSurvivorAmount + 1);
+        for (int i = 0; i != randomSurvivorAmount; i++)
+        {
+            GenerateRandomInRange(houseContainer, prefabLibrary.survivorPrefabs, decorPlacementRange, decorPlacementPos);
         }
     }
 

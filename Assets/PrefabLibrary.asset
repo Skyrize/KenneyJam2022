@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5db66b20ea15ce34f98ff9fa56353ee3, type: 3}
+  m_Name: PrefabLibrary
+  m_EditorClassIdentifier: 
+  fencePrefab: {fileID: 2042179140263269778, guid: 99f0ded6bf7b34b458bbdd0f897625f6, type: 3}
+  housePrefabs:
+  - {fileID: 6577162370407207733, guid: 0dcb053bcdb52ca49bc0867bcd1821b3, type: 3}
+  - {fileID: 2439882499749895100, guid: 0521d0782fa1b874482cdd0c5bcd9330, type: 3}
+  - {fileID: 6385707596279814558, guid: 0cee1c6a9460f1b478f7b8095727de03, type: 3}
+  - {fileID: 5480026672628855612, guid: 2608c18421554594b870c68d5e044ecf, type: 3}
+  - {fileID: 566898015770594643, guid: a741014837761964da668d6c4183e9ca, type: 3}
+  - {fileID: 4658446221677620950, guid: d059f094d998f8845800fb46f41457f1, type: 3}
+  - {fileID: 6903597135094996540, guid: 3d46a4f9c4186834f827649fd20f1f2c, type: 3}
+  - {fileID: 6945210740290426794, guid: a07d39445462f7749b2e1c9202baed8e, type: 3}
+  - {fileID: 4721077861645275745, guid: e8574252770c5ba448f118f41358d897, type: 3}
+  - {fileID: 4220243000540191805, guid: 69e48843f9b2c0b4f9befaec10b564fa, type: 3}
+  - {fileID: 3083087146637650758, guid: 6fee8c98ceb85dd41b057928de8ad232, type: 3}
+  - {fileID: 5727705637553981392, guid: 2609fda69b766954f89c135099332aaa, type: 3}
+  - {fileID: 2004280665866886862, guid: e643b0cf055dabd41aab2899dcae2dc6, type: 3}
+  - {fileID: 902251533725663643, guid: ab20d00283130334286dfee6d36cc6dd, type: 3}
+  - {fileID: 7232719317407218028, guid: 4d48e585ace74374baf472bc6c66c988, type: 3}
+  - {fileID: 5529200857548301948, guid: ff4ec23e0eebe2c47a1699d8dc940396, type: 3}
+  - {fileID: 3316055004173469884, guid: 1e5c113db8383fb4ab928f339374633f, type: 3}
+  - {fileID: 4267008374061817656, guid: 96cc9dc1b91600a419f110e52bf0ed7c, type: 3}
+  - {fileID: 6883034675074345732, guid: 6e851094842a4464091eb7e5f975cf0b, type: 3}
+  - {fileID: 1679891491325426233, guid: 13d1192a6df948c43b93a3ce15643c6e, type: 3}
+  - {fileID: 5835315641969778369, guid: de7ac4e83f30c344db77e8b892ea35aa, type: 3}
+  decorationPrefabs:
+  - {fileID: 3791628987861652844, guid: eca37718b0933a342a53680759ba399b, type: 3}
+  - {fileID: 2666476097369014599, guid: 61b9da81457ca824784fe84583d5201d, type: 3}
+  survivorPrefabs:
+  - {fileID: 4006110422494974440, guid: 0387ec229024e13438e2692a171d67c9, type: 3}
+  - {fileID: 7004019424420315552, guid: 083c1396c02b88943a802c12302f3578, type: 3}
+  - {fileID: 5891275500934817142, guid: 0fc5f15d47d99864ca432a5b4056e335, type: 3}
+  - {fileID: 246141046710276238, guid: 9db6d6c6bd948de4fade7039021e5794, type: 3}
+  - {fileID: 4014283884453661224, guid: b9759943c7794c145acd93f117c1be67, type: 3}
+  - {fileID: 2134314687675773525, guid: 2dc20e23168fbdf4b8a772a4b4883d29, type: 3}
+  roadPrefab: {fileID: 463733719428636602, guid: ebfae72d9f38c404eaaa98023f455863, type: 3}
+  intersectRoadPrefab: {fileID: 9159804167809615826, guid: 76083e495aef9ce4ca8d1dd4f3a5a8c8, type: 3}
+  floorPrefab: {fileID: 6965118010420886735, guid: 80a96802d01ef3e42abd3c3a0dff4b14, type: 3}

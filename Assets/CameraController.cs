@@ -4,20 +4,22 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [Header("Settings")]
-    public float speed = 20f;
-    public float scrollSpeed = 200f;
-    
-    Plane floor = new Plane(Vector3.up, Vector3.zero);
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public SwarmController swarm;
+    Cinemachine.CinemachineVirtualCamera cam;
+    public float baseCamDist = 20;
+    public float camDistSwarmScale = 10f;
+
+    private void Awake() {
+        cam = GetComponent<Cinemachine.CinemachineVirtualCamera>();
+        swarm.m_onSwarmSizeChanged.AddListener(ReplaceCamera);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ReplaceCamera(int zombieAmount)
     {
-        
+        Cinemachine.CinemachineComponentBase componentBase = cam.GetCinemachineComponent(Cinemachine.CinemachineCore.Stage.Body);
+        if (componentBase is Cinemachine.CinemachineFramingTransposer)
+        {
+            (componentBase as Cinemachine.CinemachineFramingTransposer).m_CameraDistance = baseCamDist + (float)zombieAmount / camDistSwarmScale; // your value
+        }
     }
 }

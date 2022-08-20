@@ -21,11 +21,10 @@ public class CityGenerator : Generator
     public float cellSize = 20;
     public Vector2Int citySize = new Vector2Int(20, 20);
     public HouseGenerator houseGenerator;
-    public GameObject roadPrefab;
-    public GameObject intersectRoadPrefab;
-    public GameObject floorPrefab;
     public Transform roadContainer;
     public Transform floorContainer;
+    public int minSurvivorAmount = 0;
+    public int maxSurvivorAmount = 4;
 
     void SeparateAndFill(Cell[,] grid)
     {
@@ -49,19 +48,31 @@ public class CityGenerator : Generator
 
     void AddIntersection(Cell[,] grid, int x, int y)
     {
-        Transform road = (PrefabUtility.InstantiatePrefab(intersectRoadPrefab, roadContainer)as GameObject).transform;
+        Transform road = (PrefabUtility.InstantiatePrefab(prefabLibrary.intersectRoadPrefab, roadContainer)as GameObject).transform;
         float intersectionSize = cellSize;
         road.position = transform.position + new Vector3(x * cellSize + intersectionSize / 2f, 0, y * cellSize + intersectionSize / 2f);
         grid[x, y].isOccupied = true;
+        RandomAddSurvivor(x, y);
+    }
+
+    void RandomAddSurvivor(int x, int y)
+    {
+        int randomSurvivorAmount = Random.Range(minSurvivorAmount, maxSurvivorAmount + 1);
+        for (int i = 0; i != randomSurvivorAmount; i++)
+        {
+            Transform generated = GenerateRandomInRange(roadContainer, prefabLibrary.survivorPrefabs, new Vector2(cellSize, cellSize), new Vector2(x * cellSize, y * cellSize));
+            generated.eulerAngles = new Vector3(0, Random.Range(0, 359), 0);
+        }
     }
 
     void AddRoad(int rotation, Cell[,] grid, int x, int y)
     {
-        Transform road = (PrefabUtility.InstantiatePrefab(roadPrefab, roadContainer)as GameObject).transform;
+        Transform road = (PrefabUtility.InstantiatePrefab(prefabLibrary.roadPrefab, roadContainer)as GameObject).transform;
         float roadSize = cellSize;
         road.position = transform.position + new Vector3(x * cellSize + roadSize / 2f, 0, y * cellSize + roadSize / 2f);
         road.eulerAngles = new Vector3(0, rotation, 0);
         grid[x, y].isOccupied = true;
+        RandomAddSurvivor(x, y);
     }
 
     void Fill(Cell[,] grid, int x, int y, CellType cellType)
@@ -117,7 +128,7 @@ public class CityGenerator : Generator
                 }
                 if (x % 10 == 0 && y % 10 == 0)
                 {
-                    Transform floor = (PrefabUtility.InstantiatePrefab(floorPrefab, floorContainer)as GameObject).transform;
+                    Transform floor = (PrefabUtility.InstantiatePrefab(prefabLibrary.floorPrefab, floorContainer)as GameObject).transform;
                     floor.position = transform.position + new Vector3(x*cellSize+cellSize*5, 0, y*cellSize+cellSize*5);
                 }
             }

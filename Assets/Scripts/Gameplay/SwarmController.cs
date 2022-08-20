@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SwarmController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class SwarmController : MonoBehaviour
 
     private GameObject m_zombiePool;
     private List<ZombiController> m_zombies = new List<ZombiController>();
+    [HideInInspector] public UnityEvent<int> m_onSwarmSizeChanged = new UnityEvent<int>();
 
     private void Awake()
     {
@@ -28,6 +30,10 @@ public class SwarmController : MonoBehaviour
         }
     }
 
+    private void Start() {
+        m_onSwarmSizeChanged.Invoke(m_zombies.Count);
+    }
+
     private void Update()
     {
         Vector3 displacement = new Vector3(
@@ -43,6 +49,7 @@ public class SwarmController : MonoBehaviour
         _zombie.Swarm = this;
         _zombie.transform.parent = m_zombiePool.transform;
         m_zombies.Add(_zombie);
+        m_onSwarmSizeChanged.Invoke(m_zombies.Count);
     }
 
     private void OnDrawGizmos()
