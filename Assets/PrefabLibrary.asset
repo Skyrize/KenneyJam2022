@@ -48,3 +48,20 @@ MonoBehaviour:
   roadPrefab: {fileID: 463733719428636602, guid: ebfae72d9f38c404eaaa98023f455863, type: 3}
   intersectRoadPrefab: {fileID: 9159804167809615826, guid: 76083e495aef9ce4ca8d1dd4f3a5a8c8, type: 3}
   floorPrefab: {fileID: 6965118010420886735, guid: 80a96802d01ef3e42abd3c3a0dff4b14, type: 3}
+  roofMaterials:
+  - {fileID: 2100000, guid: 4164451da265ed4468ebbdcc1798b64b, type: 2}
+  - {fileID: 2100000, guid: 0bb89c45734170a40a291f836d0a819c, type: 2}
+  - {fileID: 2100000, guid: ea040c5c7ba6fa545989160fbf4ea75e, type: 2}
+  - {fileID: 2100000, guid: 0751e0a91d4e23140936a0a4c93655f4, type: 2}
+  wallMaterials:
+  - {fileID: 2100000, guid: 101eec5380730874e915337a95fc8ca7, type: 2}
+  - {fileID: 2100000, guid: e3440393addbe4e4e903caad724bd1e9, type: 2}
+  - {fileID: 2100000, guid: 905f91b54890ef34babe12a06e4f420c, type: 2}
+  grassMaterials:
+  - {fileID: 2100000, guid: 0d10a84fb89f6d64fa08d8e7450a1243, type: 2}
+  - {fileID: 2100000, guid: 69bb54f3bb74f454a83a1734727ecdbf, type: 2}
+  - {fileID: 2100000, guid: c70416332db8d7144bfc66e59fc19d79, type: 2}
+  woodMaterials:
+  - {fileID: 2100000, guid: a3a7dd2512ec877479b64e14dc229f47, type: 2}
+  - {fileID: 2100000, guid: 3198d3f2bc98b8b4a90648ab9c3af320, type: 2}
+  - {fileID: 2100000, guid: 36d43dd0b556ab244a7a0a5e0a0f96d5, type: 2}
