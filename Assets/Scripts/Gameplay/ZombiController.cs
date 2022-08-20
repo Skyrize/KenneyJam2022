@@ -5,50 +5,102 @@ using UnityEngine;
 public class ZombiController : MonoBehaviour
 {
     [SerializeField] private float m_speed = 2.0f;
+    [SerializeField] private float m_minSpeed = 0.2f;
     [SerializeField] private float m_angularSpeed = 2.0f;
     [SerializeField] private Rigidbody m_rigidBody;
     [SerializeField] private Animator m_animator;
+    [SerializeField] private SphereCollider m_avoidanceCollider;
     [SerializeField] private AnimationCurve m_avoidanceCurve;
+    [SerializeField] private float m_hitDamagePoints = 1.0f;
+    [SerializeField] private float m_hitCooldownDuration = 1.0f;
 
     public SwarmController Swarm { get; set; }
 
     private List<ZombiController> m_nearZombies = new List<ZombiController>(10);
     private Vector3 m_desiredVelocity;
+    private Timer m_hitCooldownTimer = new Timer();
 
     private void Update()
     {
         if (Swarm)
         {
-            // Move
-            Vector3 heading = (Swarm.transform.position - transform.position).normalized;
+            Vector3 heading = ComputeHeading();
             Vector3 avoidance = ComputeAvoidance();
-            float avoidanceRatio = avoidance.magnitude;
-            m_desiredVelocity = (heading * (1.0f - avoidanceRatio) + avoidance * avoidanceRatio) * m_speed;
-            //m_rigidBody.velocity = m_desiredVelocity;
-            transform.position = transform.position + m_desiredVelocity * Time.deltaTime;
+            UpdateVelocity(heading, avoidance);
+            ApplyVelocity();
+        }
+    }
 
-            // Rotation
-            Vector3 lookDirection = Vector3.RotateTowards(transform.forward, m_desiredVelocity, Time.deltaTime * m_angularSpeed, 0.0f);
+    private void LateUpdate()
+    {
+        UpdateAnimation();
+    }
+
+    private Vector3 ComputeHeading()
+    {
+        Vector3 heading = Swarm.transform.position - transform.position;
+        heading.y = 0.0f;
+        return Vector3.ClampMagnitude(heading, 1.0f);
+    }
+
+    private Vector3 ComputeAvoidance()
+    {
+        Vector3 avoidance = Vector3.zero;
+
+        foreach (ZombiController zombi in m_nearZombies)
+        {
+            Vector3 deltaPos = transform.position - zombi.transform.position;
+            deltaPos.y = 0.0f;
+            float deltaNorm = deltaPos.magnitude;
+            avoidance += deltaPos / deltaNorm * m_avoidanceCurve.Evaluate(1 - (deltaNorm / m_avoidanceCollider.radius));
+        }
+
+        return avoidance;
+    }
+
+    private void UpdateVelocity(Vector3 _heading, Vector3 _avoidance)
+    {
+        Vector3 currentVelocity = m_rigidBody.velocity;
+        float headingRatio = _heading.magnitude / m_speed;
+        //m_desiredVelocity = Vector3.ClampMagnitude(currentVelocity.normalized * 0.0f + _heading * headingRatio + _avoidance.normalized * (1.0f - headingRatio), 1.0f) * m_speed;
+        m_desiredVelocity = Vector3.ClampMagnitude(_heading + _avoidance, 1.0f) * m_speed;
+    }
+
+    private void ApplyVelocity()
+    {
+        if (m_desiredVelocity.sqrMagnitude >= m_minSpeed * m_minSpeed)
+        {
+            //transform.position = transform.position + m_desiredVelocity * Time.deltaTime;
+            //transform.position = Vector3.MoveTowards(transform.position, transform.position + m_desiredVelocity * Time.deltaTime, m_speed);
+            m_rigidBody.velocity = m_desiredVelocity;
+
+            Vector3 lookDirection = Vector3.RotateTowards(transform.forward, m_desiredVelocity.normalized, Time.deltaTime * m_angularSpeed, 0.0f);
             m_rigidBody.rotation = Quaternion.LookRotation(lookDirection);
-
-            UpdateAnimation();
+        }
+        else
+        {
+            m_rigidBody.velocity = Vector3.zero;
+            m_rigidBody.angularVelocity = Vector3.zero;
         }
     }
 
     private void UpdateAnimation()
     {
-        float speed = m_desiredVelocity.magnitude;
-        bool isRunning = speed > 0.1f;
+        float speed = m_rigidBody.velocity.magnitude;
+        bool isRunning = m_rigidBody.velocity.sqrMagnitude >= m_minSpeed * m_minSpeed;
         m_animator.SetBool("IsRunning", isRunning);
-        m_animator.speed = isRunning ? Mathf.Lerp(0.0f, 1.0f, Mathf.Min(speed, m_speed) / m_speed) : 1.0f;
+        m_animator.speed = isRunning ? Mathf.Lerp(0.3f, 1.0f, Mathf.Min(speed, m_speed) / m_speed) : 1.0f;
     }
 
     private void OnTriggerEnter(Collider _other)
     {
-        ZombiController zombi = _other.GetComponentInParent<ZombiController>();
-        if (zombi)
+        ZombiController zombie = _other.GetComponentInParent<ZombiController>();
+        if (zombie)
         {
-            m_nearZombies.Add(zombi);
+            if (zombie.Swarm == null)
+                Swarm.AddZombie(zombie);
+
+            m_nearZombies.Add(zombie);
         }
     }
 
@@ -61,20 +113,18 @@ public class ZombiController : MonoBehaviour
         }
     }
 
-    private Vector3 ComputeAvoidance()
+    private void OnCollisionStay(Collision _collision)
     {
-        Vector3 avoidance = Vector3.zero;
-
-        foreach (ZombiController zombi in m_nearZombies)
+        // Hit survivor
+        if (!m_hitCooldownTimer.IsStarted || m_hitCooldownTimer.ElapsedTime > m_hitCooldownDuration)
         {
-            Vector3 deltaPos = transform.position - zombi.transform.position;
-            deltaPos.y = 0.0f;
-            avoidance += deltaPos.normalized * m_avoidanceCurve.Evaluate(1 / deltaPos.magnitude);
+            SurvivorController survivor = _collision.gameObject.GetComponent<SurvivorController>();
+            if (survivor)
+            {
+                survivor.Hit(this, m_hitDamagePoints);
+                m_hitCooldownTimer.Restart();
+                return;
+            }
         }
-
-        if (avoidance.sqrMagnitude > 1.0f)
-            avoidance.Normalize();
-        
-        return avoidance;
     }
 }

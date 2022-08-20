@@ -6,31 +6,29 @@ public class SwarmController : MonoBehaviour
 {
     [SerializeField] private float m_speed = 3.0f;
     [SerializeField] private uint m_initialSize = 10;
-    [SerializeField] private List<GameObject> m_zombiePrefabs;
 
-    private GameObject m_zombiPool;
-    private List<GameObject> m_zombies = new List<GameObject>();
+    private GameObject m_zombiePool;
+    private List<ZombiController> m_zombies = new List<ZombiController>();
 
-    void Awake()
+    private void Awake()
     {
         // Instantiate pool
-        m_zombiPool = new GameObject();
+        m_zombiePool = new GameObject();
+        m_zombiePool.name = "Zombie Pool";
         
         // Instantiate zombies
         float spawnRadius = 10.0f;
         m_zombies.Capacity = (int)m_initialSize;
         for (uint i = 0; i < m_initialSize; ++i)
         {
-            int prefabIndex = Random.Range(0, m_zombiePrefabs.Count);
-            GameObject zombi = Instantiate(m_zombiePrefabs[prefabIndex], m_zombiPool.transform);
             Vector2 spawnPosition2D = Random.insideUnitCircle * spawnRadius;
-            zombi.transform.position = new Vector3(transform.position.x + spawnPosition2D.x, 0.0f, transform.position.z + spawnPosition2D.y);
-            zombi.GetComponent<ZombiController>().Swarm = this;
-            m_zombies.Add(zombi);
+            Vector3 spawnPosition = transform.position + new Vector3(spawnPosition2D.x, 0.0f, spawnPosition2D.y);
+            GameObject zombie = GameManager.Instance.SpawnManager.SpawnZombie(spawnPosition, Quaternion.identity);
+            AddZombie(zombie.GetComponent<ZombiController>());
         }
     }
 
-    void Update()
+    private void Update()
     {
         Vector3 displacement = new Vector3(
             Input.GetAxis("Horizontal"),
@@ -38,6 +36,13 @@ public class SwarmController : MonoBehaviour
             Input.GetAxis("Vertical"));
 
         transform.position = transform.position + displacement * Time.deltaTime * m_speed;
+    }
+
+    public void AddZombie(ZombiController _zombie)
+    {
+        _zombie.Swarm = this;
+        _zombie.transform.parent = m_zombiePool.transform;
+        m_zombies.Add(_zombie);
     }
 
     private void OnDrawGizmos()

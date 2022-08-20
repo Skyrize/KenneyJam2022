@@ -16,8 +16,6 @@ public class ScreenEffectManager
     {
         if (m_remainingFreeze > 0)
             UpdateFreeze();
-
-        Debug.Log(Time.timeScale);
     }
 
     private void UpdateFreeze()

@@ -7,7 +7,7 @@ public class HealthComponent : MonoBehaviour
 {
     [Header("Attributes")]
     [SerializeField]
-    private float m_actualHealth = 100;
+    private float m_currentHealth = 100;
     [SerializeField]
     private float m_maxHealth = 100;
 
@@ -19,16 +19,16 @@ public class HealthComponent : MonoBehaviour
 
     private float actualHealth {
         get {
-            return m_actualHealth;
+            return m_currentHealth;
         }
         set {
-            m_actualHealth = Mathf.Clamp(value, 0, m_maxHealth);
+            m_currentHealth = Mathf.Clamp(value, 0, m_maxHealth);
             onHealthRatioChanged.Invoke(healthRatio);
         }
     }
 
-    public float healthRatio => m_actualHealth / m_maxHealth;
-    public float health => m_actualHealth;
+    public float healthRatio => m_currentHealth / m_maxHealth;
+    public float health => m_currentHealth;
     public float maxHealth => m_maxHealth;
     public bool isAlive => actualHealth > 0;
     public bool isDead => !isAlive;

@@ -7,10 +7,12 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; } = null;
 
     [SerializeField] private SceneManager m_sceneManager = new SceneManager();
+    [SerializeField] private SpawnManager m_spawnManager = new SpawnManager();
     [SerializeField] private PauseManager m_pauseManager = new PauseManager();
     [SerializeField] private ScreenEffectManager m_screenEffectManager = new ScreenEffectManager();
 
     public SceneManager SceneManager { get => m_sceneManager; }
+    public SpawnManager SpawnManager { get => m_spawnManager; }
     public PauseManager PauseManager { get => m_pauseManager; }
     public ScreenEffectManager ScreenEffectManager { get => m_screenEffectManager; }
 
