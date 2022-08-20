@@ -13,6 +13,11 @@ public class SurvivorController : MonoBehaviour
     // Hit reaction
     private Vector3 m_hitVelocity;
 
+    private void Start()
+    {
+        m_healthComponent.onDeathEvent.AddListener(OnDeath);
+    }
+
     private void FixedUpdate()
     {
         UpdateHit();
@@ -53,25 +58,20 @@ public class SurvivorController : MonoBehaviour
         }
     }
 
-    public void Hit(ZombiController _zombi, float _damagePoints)
+    public void Hit(ZombiController _zombi)
     {
-        m_healthComponent.ReduceHealth(_damagePoints);
+        Vector3 hitDirection = transform.position - _zombi.transform.position;
+        hitDirection.y = 0.0f;
+        m_hitVelocity = hitDirection * 10.0f;
+        m_rigidBody.rotation = Quaternion.LookRotation(-hitDirection);
+    }
 
-        if (m_healthComponent.isDead)
-        {
-            GameManager.Instance.AudioComponent.Play("Transform");
-            GameManager.Instance.SpawnManager.SpawnPouf(transform.position + Vector3.up * 1.0f);
-            ZombiController newZombie = GameManager.Instance.SpawnManager.SpawnZombie(transform.position, transform.rotation).GetComponent<ZombiController>();
-            newZombie.Wait(0.6f);
-            _zombi.Swarm.AddZombie(newZombie);
-            Destroy(gameObject);
-        }
-        else
-        {
-            Vector3 hitDirection = transform.position - _zombi.transform.position;
-            hitDirection.y = 0.0f;
-            m_hitVelocity = hitDirection * 10.0f;
-            m_rigidBody.rotation = Quaternion.LookRotation(-hitDirection);
-        }
+    private void OnDeath()
+    {
+        GameManager.Instance.AudioComponent.Play("Transform");
+        GameManager.Instance.SpawnManager.SpawnPouf(transform.position + Vector3.up * 1.0f);
+        ZombiController newZombie = GameManager.Instance.SpawnManager.SpawnZombie(transform.position, transform.rotation).GetComponent<ZombiController>();
+        newZombie.Wait(0.6f);
+        Destroy(gameObject);
     }
 }

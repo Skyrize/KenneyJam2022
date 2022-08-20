@@ -138,16 +138,25 @@ public class ZombiController : MonoBehaviour
         // Hit survivor
         if (!m_hitCooldownTimer.IsStarted || m_hitCooldownTimer.ElapsedTime > m_hitCooldownDuration)
         {
-            SurvivorController survivor = _collision.gameObject.GetComponent<SurvivorController>();
-            if (survivor)
             {
-                Vector3 hitPosition = _collision.contacts[0].point;
-                hitPosition.y = 2.0f;
-                GameManager.Instance.SpawnManager.SpawnHit(hitPosition);
-                GameManager.Instance.AudioComponent.Play("Punch");
-                survivor.Hit(this, m_hitDamagePoints);
-                m_hitCooldownTimer.Restart();
-                return;
+                HealthComponent healthComponent = _collision.gameObject.GetComponent<HealthComponent>();
+                if (healthComponent)
+                {
+                    healthComponent.ReduceHealth(m_hitDamagePoints);
+                }
+            }
+            {
+                SurvivorController survivor = _collision.gameObject.GetComponent<SurvivorController>();
+                if (survivor)
+                {
+                    Vector3 hitPosition = _collision.contacts[0].point;
+                    hitPosition.y = 2.0f;
+                    GameManager.Instance.SpawnManager.SpawnHit(hitPosition);
+                    GameManager.Instance.AudioComponent.Play("Punch");
+                    survivor.Hit(this);
+                    m_hitCooldownTimer.Restart();
+                    return;
+                }
             }
         }
     }

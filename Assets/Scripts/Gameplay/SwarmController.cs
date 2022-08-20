@@ -64,15 +64,16 @@ public class SwarmController : MonoBehaviour
                 return;
             m_boostTimer = Mathf.Clamp(m_boostTimer - Time.deltaTime, 0, m_boostDuration);
             m_isBoosting = true;
-            m_boostBar.SetFill(m_boostTimer / m_boostDuration);
         }
         else
         {
             if (m_boostTimer == m_boostDuration)
                 return;
             m_boostTimer = Mathf.Clamp(m_boostTimer + Time.deltaTime * m_boostRecoveryScale, 0, m_boostDuration);
-            m_boostBar.SetFill(m_boostTimer / m_boostDuration);
         }
+
+        if (m_boostBar)
+            m_boostBar.SetFill(m_boostTimer / m_boostDuration);
     }
 
     private void Update()
