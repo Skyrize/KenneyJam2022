@@ -7,7 +7,6 @@ public class SurvivorController : MonoBehaviour
 {
     [SerializeField] private HealthComponent m_healthComponent;
     [SerializeField] private Rigidbody m_rigidBody;
-    [SerializeField] private float m_angularSpeed = 20.0f;
 
     private Vector3 m_desiredVelocity = Vector3.zero;
 
@@ -60,6 +59,7 @@ public class SurvivorController : MonoBehaviour
 
         if (m_healthComponent.isDead)
         {
+            GameManager.Instance.AudioComponent.Play("Transform");
             GameManager.Instance.SpawnManager.SpawnPouf(transform.position + Vector3.up * 1.0f);
             GameObject newZombi = GameManager.Instance.SpawnManager.SpawnZombie(transform.position, transform.rotation);
             _zombi.Swarm.AddZombie(newZombi.GetComponent<ZombiController>());
