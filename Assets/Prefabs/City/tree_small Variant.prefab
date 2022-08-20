@@ -119,3 +119,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_height: 12
+  m_nbSurvivorsInside: 0

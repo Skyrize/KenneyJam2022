@@ -173,6 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_height: 6
+  m_nbSurvivorsInside: 0
 --- !u!114 &4792019885102133267
 MonoBehaviour:
   m_ObjectHideFlags: 0
