@@ -163,7 +163,7 @@ public class CityGenerator : Generator
     {
         if (!houseGenerator)
             throw new System.Exception("Missing house generator");
-        
+        Clean();
         Cell[,] grid = new Cell[citySize.x, citySize.y];
         FillBasic(grid);
     }
