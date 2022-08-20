@@ -54,6 +54,7 @@ MonoBehaviour:
     - {fileID: 707177933332136128, guid: 61637e4046a718b458d3fa66b2a47405, type: 3}
     - {fileID: 175105992163973939, guid: db86e4cd489997843a4f6148fd3592c0, type: 3}
     m_fxPoufPrefab: {fileID: 4075613209435409371, guid: a431f3d90d71466469d5dbae1adf8f01, type: 3}
+    m_fxHitPrefab: {fileID: 4075613209435409371, guid: e8bd7f66582e17b4eafa73741ff10c4f, type: 3}
 --- !u!82 &7328914919879646964
 AudioSource:
   m_ObjectHideFlags: 0
