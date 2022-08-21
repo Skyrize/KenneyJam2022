@@ -35,18 +35,15 @@ public class HouseGenerator : Generator
         Material randomWallMat = prefabLibrary.wallMaterials[Random.Range(0, prefabLibrary.wallMaterials.Length)];
         Transform house = GenerateInRange(container, prefabLibrary.housePrefabs[randomPrefabIndex], placementRange, basePos);
         MeshRenderer meshRenderer = house.GetComponent<MeshRenderer>();
-        Debug.Log("NEwx House");
         Material[] materials = meshRenderer.sharedMaterials;
         for (int i = 0; i != materials.Length; i++)
         {
             if (materials[i].name == "roof")
             {
-            Debug.Log(materials[i].name + " /// " + randomRoofMat.name);
                 materials[i] = randomRoofMat;
             }
             if (materials[i].name == "_defaultMat")
             {
-            Debug.Log(materials[i].name + " /// " + randomWallMat.name);
                 materials[i] = randomWallMat;
             }
         }

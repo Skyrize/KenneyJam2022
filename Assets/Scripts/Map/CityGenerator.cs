@@ -40,6 +40,8 @@ public class CityGenerator : Generator
     {
         float houseSize = cellSize * 2;
         houseGenerator.transform.position = transform.position + new Vector3(x * cellSize + houseSize / 2f, 0, y * cellSize + houseSize / 2f);
+        int randomOrientation = Random.Range(0, 3);
+        houseGenerator.transform.rotation = Quaternion.Euler(0, randomOrientation * 90, 0);
         grid[x, y].isOccupied = true;
         
         grid[x+1, y].isOccupied = true;
