@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public PauseManager PauseManager { get => m_pauseManager; }
     public ScreenEffectManager ScreenEffectManager { get => m_screenEffectManager; }
 
+    public uint LostCount { get; set; }
+
     private void Awake()
     {
         // Check unicity
