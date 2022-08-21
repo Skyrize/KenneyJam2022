@@ -186,7 +186,6 @@ public class CowardBehavior : Behavior
 
 public class SurvivorController : MonoBehaviour
 {
-
     [SerializeField] private HealthComponent m_healthComponent;
     [SerializeField] private Rigidbody m_rigidBody;
     [SerializeField] private Behavior.Type m_behavior;
@@ -198,6 +197,7 @@ public class SurvivorController : MonoBehaviour
     [SerializeField] private Animator m_animator;
     public float m_runSpeed = 3;
     public float m_walkSpeed = 1;
+    private ZombiController m_lastHitZombi = null;
 
     [HideInInspector] public Vector3 m_desiredVelocity = Vector3.zero;
     static Collider[] detectionTargets = new Collider[5];
@@ -327,6 +327,7 @@ public class SurvivorController : MonoBehaviour
         m_rigidBody.rotation = Quaternion.LookRotation(-hitDirection);
         m_runSpeed /= 4f;
         m_walkSpeed /= 4f;
+        m_lastHitZombi = _zombi;
     }
 
     private void OnDeath()
@@ -335,6 +336,7 @@ public class SurvivorController : MonoBehaviour
         GameManager.Instance.SpawnManager.SpawnPouf(transform.position + Vector3.up * 1.0f);
         ZombiController newZombie = GameManager.Instance.SpawnManager.SpawnZombie(transform.position, transform.rotation).GetComponent<ZombiController>();
         newZombie.Wait(0.6f);
+        m_lastHitZombi.Swarm.AddZombie(newZombie);
         Destroy(gameObject);
     }
 

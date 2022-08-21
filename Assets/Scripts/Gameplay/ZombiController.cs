@@ -147,6 +147,13 @@ public class ZombiController : MonoBehaviour
         if (!m_hitCooldownTimer.IsStarted || m_hitCooldownTimer.ElapsedTime > m_hitCooldownDuration)
         {
             {
+                SurvivorController survivor = _collision.gameObject.GetComponent<SurvivorController>();
+                if (survivor)
+                {
+                    survivor.Hit(this);
+                }
+            }
+            {
                 HealthComponent healthComponent = _collision.gameObject.GetComponent<HealthComponent>();
                 if (healthComponent)
                 {
@@ -158,13 +165,6 @@ public class ZombiController : MonoBehaviour
                     GameManager.Instance.AudioComponent.Play("Punch");
 
                     m_hitCooldownTimer.Restart();
-                }
-            }
-            {
-                SurvivorController survivor = _collision.gameObject.GetComponent<SurvivorController>();
-                if (survivor)
-                {
-                    survivor.Hit(this);
                 }
             }
         }
