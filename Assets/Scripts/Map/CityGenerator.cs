@@ -10,7 +10,8 @@ public enum CellType
     ROAD_HORIZONTAL,
     ROAD_VERTICAL,
     ROAD_INTERSECT,
-    HOUSE
+    HOUSE,
+    CITY
 }
 
 struct Cell
@@ -24,22 +25,24 @@ public class CityGenerator : Generator
 #if UNITY_EDITOR
 
     public float cellSize = 20;
-    public Vector2Int citySize = new Vector2Int(20, 20);
+    public int worldSize = 20;
+    public int suburbanSize = 20;
+    public int suburbanDangerousSize = 20;
+    public int citySize = 20;
     public Vector2Int finalCitySize;
     public HouseGenerator houseGenerator;
+    public Transform worldContainer;
+    Transform cityContainer;
     Transform roadContainer;
     Transform floorContainer;
     Transform survivorContainer;
     Transform barrierContainer;
     public int minSurvivorAmount = 0;
     public int maxSurvivorAmount = 4;
+    public int level1Prob = 6;
+    public int level2Prob = 3;
 
-    void SeparateAndFill(Cell[,] grid)
-    {
-
-    }
-
-    void AddHouse(Cell[,] grid, int x, int y)
+    void GenerateHouse(Cell[,] grid, int x, int y)
     {
         float houseSize = cellSize * 2;
         houseGenerator.transform.position = transform.position + new Vector3(x * cellSize + houseSize / 2f, 0, y * cellSize + houseSize / 2f);
@@ -55,58 +58,107 @@ public class CityGenerator : Generator
 
         houseGenerator.Generate();
     }
+    
+    void GenerateCity(Cell[,] grid, int x, int y)
+    {
+        //TODO : city placement
+        float citySize = cellSize * 2;
+        int randomPrefabIndex = Random.Range(0, prefabLibrary.cityPrefab.Length);
+        Transform city = (PrefabUtility.InstantiatePrefab(prefabLibrary.cityPrefab[randomPrefabIndex], cityContainer)as GameObject).transform;
+        city.transform.position = transform.position + new Vector3(x * cellSize + citySize / 2f, 0, y * cellSize + citySize / 2f);
+        int randomOrientation = Random.Range(0, 3);
+        city.transform.rotation = Quaternion.Euler(0, randomOrientation * 90, 0);
+        grid[x, y].isOccupied = true;
+        
+        grid[x+1, y].isOccupied = true;
+        
+        grid[x, y+1].isOccupied = true;
+        
+        grid[x+1, y+1].isOccupied = true;
+    }
 
-    void AddIntersection(Cell[,] grid, int x, int y)
+    void GenerateIntersection(Cell[,] grid, int x, int y)
     {
         Transform road = (PrefabUtility.InstantiatePrefab(prefabLibrary.intersectRoadPrefab, roadContainer)as GameObject).transform;
         float intersectionSize = cellSize;
         road.position = transform.position + new Vector3(x * cellSize + intersectionSize / 2f, 0, y * cellSize + intersectionSize / 2f);
         grid[x, y].isOccupied = true;
-        RandomAddSurvivor(x, y);
+        RandomGenerateSurvivor(road.position.x, road.position.z);
     }
 
-    void RandomAddSurvivor(int x, int y)
+    int currentLevel = 0;
+
+    void RandomGenerateSurvivor(float x, float y)
     {
         int randomSurvivorAmount = Random.Range(minSurvivorAmount, maxSurvivorAmount + 1);
         for (int i = 0; i != randomSurvivorAmount; i++)
         {
-            Transform generated = GenerateRandomInRange(survivorContainer, prefabLibrary.survivorPrefabs, new Vector2(cellSize, cellSize), new Vector2(x * cellSize, y * cellSize));
+            Transform generated;
+            if (currentLevel == 0)
+            {
+                generated = GenerateRandomInRange(survivorContainer, prefabLibrary.survivorPrefabs, new Vector2(cellSize, cellSize), new Vector2(x, y));
+            }
+            else if (currentLevel == 1)
+            {
+                if (Random.Range(0, level1Prob + 1) == 0)
+                {
+                    generated = GenerateRandomInRange(survivorContainer, prefabLibrary.armedSurvivorPrefabs, new Vector2(cellSize, cellSize), new Vector2(x, y));
+                }
+                else
+                {
+                    generated = GenerateRandomInRange(survivorContainer, prefabLibrary.survivorPrefabs, new Vector2(cellSize, cellSize), new Vector2(x, y));
+                }
+            }
+            else
+            {
+                if (Random.Range(0, level2Prob + 1) == 0)
+                {
+                    generated = GenerateRandomInRange(survivorContainer, prefabLibrary.armedSurvivorPrefabs, new Vector2(cellSize, cellSize), new Vector2(x, y));
+                }
+                else
+                {
+                    generated = GenerateRandomInRange(survivorContainer, prefabLibrary.survivorPrefabs, new Vector2(cellSize, cellSize), new Vector2(x, y));
+                }
+            }
             generated.eulerAngles = new Vector3(0, Random.Range(0, 359), 0);
         }
     }
 
-    void AddRoad(int rotation, Cell[,] grid, int x, int y)
+    void GenerateRoad(int rotation, Cell[,] grid, int x, int y)
     {
         Transform road = (PrefabUtility.InstantiatePrefab(prefabLibrary.roadPrefab, roadContainer)as GameObject).transform;
         float roadSize = cellSize;
         road.position = transform.position + new Vector3(x * cellSize + roadSize / 2f, 0, y * cellSize + roadSize / 2f);
         road.eulerAngles = new Vector3(0, rotation, 0);
         grid[x, y].isOccupied = true;
-        RandomAddSurvivor(x, y);
+        RandomGenerateSurvivor(road.position.x, road.position.z);
     }
 
-    void Fill(Cell[,] grid, int x, int y, CellType cellType)
+    void Generate(Cell[,] grid, int x, int y, CellType cellType)
     {
         switch (cellType)
         {
             case CellType.ROAD_HORIZONTAL:
-                AddRoad(0, grid, x, y);
+                GenerateRoad(0, grid, x, y);
             break;
             case CellType.ROAD_VERTICAL:
-                AddRoad(90, grid, x, y);
+                GenerateRoad(90, grid, x, y);
             break;
             case CellType.ROAD_INTERSECT:
-                AddIntersection(grid, x, y);
+                GenerateIntersection(grid, x, y);
             break;
             case CellType.HOUSE:
-                AddHouse(grid, x, y);
+                GenerateHouse(grid, x, y);
+            break;
+            case CellType.CITY:
+                GenerateCity(grid, x, y);
             break;
             default:
             break;
         }
     }
 
-    void AddBarrier(int x, int y, int rotation)
+    void GenerateBarrier(int x, int y, int rotation)
     {
         Transform barrier = (PrefabUtility.InstantiatePrefab(prefabLibrary.barrierPrefab, barrierContainer)as GameObject).transform;
         float roadSize = cellSize;
@@ -127,53 +179,57 @@ public class CityGenerator : Generator
     }
 
     int blockSize = 5;
-    void FillBasicBlock(Cell[,] grid, int x, int y)
+    void GenerateSuburbanBlock(Cell[,] grid, int x, int y)
     {
-        Fill(grid, x, y, CellType.HOUSE);
-        Fill(grid, x+2, y, CellType.HOUSE);
-        Fill(grid, x, y+2, CellType.HOUSE);
-        Fill(grid, x+2, y+2, CellType.HOUSE);
+        Generate(grid, x, y, CellType.HOUSE);
+        Generate(grid, x+2, y, CellType.HOUSE);
+        Generate(grid, x, y+2, CellType.HOUSE);
+        Generate(grid, x+2, y+2, CellType.HOUSE);
         
         for (int i = 0; i != blockSize - 1; i++)
         {
-            Fill(grid, x + blockSize - 1, y + i, CellType.ROAD_VERTICAL);
+            Generate(grid, x + blockSize - 1, y + i, CellType.ROAD_VERTICAL);
         }
 
         for (int i = 0; i != blockSize - 1; i++)
         {
-            Fill(grid, x + i, y + blockSize - 1, CellType.ROAD_HORIZONTAL);
+            Generate(grid, x + i, y + blockSize - 1, CellType.ROAD_HORIZONTAL);
         }
 
-        Fill(grid, x + blockSize - 1, y + blockSize - 1, CellType.ROAD_INTERSECT);
+        Generate(grid, x + blockSize - 1, y + blockSize - 1, CellType.ROAD_INTERSECT);
+    }
+    
+    void GenerateCityBlock(Cell[,] grid, int x, int y)
+    {
+        Generate(grid, x, y, CellType.CITY);
+        Generate(grid, x+2, y, CellType.CITY);
+        Generate(grid, x, y+2, CellType.CITY);
+        Generate(grid, x+2, y+2, CellType.CITY);
+        
+        for (int i = 0; i != blockSize - 1; i++)
+        {
+            Generate(grid, x + blockSize - 1, y + i, CellType.ROAD_VERTICAL);
+        }
 
-        if (x == 0) //Barriers left side of map
+        for (int i = 0; i != blockSize - 1; i++)
         {
-            for (int i = 0; i != blockSize; i++)
-            {
-                AddBarrier(x + blockSize - 1, y + i, 0);
-            }
+            Generate(grid, x + i, y + blockSize - 1, CellType.ROAD_HORIZONTAL);
         }
-        if (y == 0) //Barriers down side of map
+
+        Generate(grid, x + blockSize - 1, y + blockSize - 1, CellType.ROAD_INTERSECT);
+    }
+
+    void GenerateBarriers()
+    {
+        for (int i = 0; i != finalCitySize.y; i++)//Barriers left and right side of map
         {
-            for (int i = 0; i != blockSize; i++)
-            {
-                AddBarrier(x + i, y + blockSize - 1, 90);
-            }
+            GenerateBarrier(blockSize - 1, i, 0);
+            GenerateBarrier(finalCitySize.x - blockSize - 1, i, 0);
         }
-        if (x == finalCitySize.x - blockSize) //Barriers right side of map
+        for (int i = 0; i != finalCitySize.x; i++) //Barriers up & down side of map
         {
-            for (int i = 0; i != blockSize; i++)
-            {
-                AddBarrier(x - 1, y + i, 0);
-            }
-        }
-        if (y == finalCitySize.y - blockSize) //Barriers up side of map
-        {
-            for (int i = 0; i != blockSize; i++)
-            {
-                AddBarrier(x + i, y - 1, 90);
-            }
-            
+            GenerateBarrier(i, blockSize - 1, 90);
+            GenerateBarrier(i, finalCitySize.y - blockSize - 1, 90);
         }
     }
 
@@ -188,24 +244,6 @@ public class CityGenerator : Generator
         meshRenderer.sharedMaterials = materials;
     }
 
-    void FillBasic(Cell[,] grid)
-    {
-        for (int x = 0; x != finalCitySize.x; x++)
-        {
-            for (int y = 0; y != finalCitySize.y; y++)
-            {
-                if (!grid[x, y].isOccupied)
-                {
-                    FillBasicBlock(grid, x, y);
-                }
-                if (x % 5 == 0 && y % 5 == 0)
-                {
-                    GenerateFloor(x, y);
-                }
-            }
-        }
-    }
-
     public void CleanTarget(string targetName)
     {
         Transform target = transform.Find(targetName);
@@ -218,38 +256,91 @@ public class CityGenerator : Generator
     public override void Clean()
     {
         houseGenerator.transform.position = transform.position;
-        CleanTarget("floorContainer");
-        CleanTarget("survivorContainer");
-        CleanTarget("barrierContainer");
-        CleanTarget("housesContainer");
-        CleanTarget("roadContainer");
+        if (worldContainer)
+            worldContainer.DestroyChilds();
     }
 
+    void GenerateMapCollider(int x, int y, float rotation)
+    {
+        Transform collider = (PrefabUtility.InstantiatePrefab(prefabLibrary.colliderPrefab, barrierContainer)as GameObject).transform;
+        float roadSize = cellSize;
+        collider.position = transform.position + new Vector3(x * cellSize + roadSize / 2f, 0, y * cellSize + roadSize / 2f);
+        collider.eulerAngles = new Vector3(0, rotation, 0);
+        BoxCollider box = collider.GetComponent<BoxCollider>();
+        box.size = new Vector3(finalCitySize.x * cellSize * 2, box.size.y, box.size.z);
+    }
+
+    void GenerateMapColliders()
+    {
+        GenerateMapCollider(finalCitySize.x / 2, blockSize, 0); // bottom 
+        GenerateMapCollider(finalCitySize.x / 2, finalCitySize.y - blockSize, 0); // top
+        
+        GenerateMapCollider(blockSize, finalCitySize.y / 2, 90); // left 
+        GenerateMapCollider(finalCitySize.y - blockSize - 1, finalCitySize.y / 2, 90); // right
+    }
 
     public override void Generate()
     {
         if (!houseGenerator)
             throw new System.Exception("Missing house generator");
         Clean();
+        if (!worldContainer)
+        {
+            worldContainer = new GameObject("worldContainer").transform;
+            worldContainer.transform.position = transform.position;
+        }
         roadContainer = new GameObject("roadContainer").transform;
-        roadContainer.transform.parent = transform;
+        roadContainer.transform.parent = worldContainer;
         roadContainer.transform.localPosition = Vector3.zero;
+        cityContainer = new GameObject("cityContainer").transform;
+        cityContainer.transform.parent = worldContainer;
+        cityContainer.transform.localPosition = Vector3.zero;
         floorContainer = new GameObject("floorContainer").transform;
-        floorContainer.transform.parent = transform;
+        floorContainer.transform.parent = worldContainer;
         floorContainer.transform.localPosition = Vector3.zero;
         survivorContainer = new GameObject("survivorContainer").transform;
-        survivorContainer.transform.parent = transform;
+        survivorContainer.transform.parent = worldContainer;
         survivorContainer.transform.localPosition = Vector3.zero;
         barrierContainer = new GameObject("barrierContainer").transform;
-        barrierContainer.transform.parent = transform;
+        barrierContainer.transform.parent = worldContainer;
         barrierContainer.transform.localPosition = Vector3.zero;
         houseGenerator.housesContainer = new GameObject("housesContainer").transform;
-        houseGenerator.housesContainer.transform.parent = transform;
+        houseGenerator.housesContainer.transform.parent = worldContainer;
         houseGenerator.housesContainer.transform.localPosition = Vector3.zero;
         
-        finalCitySize = new Vector2Int(citySize.x + blockSize * 2, citySize.y + blockSize * 2);
+        finalCitySize = new Vector2Int(worldSize + blockSize * 2, citySize + suburbanSize + suburbanDangerousSize + blockSize * 2);
         Cell[,] grid = new Cell[finalCitySize.x, finalCitySize.y];
-        FillBasic(grid);
+
+        GenerateMapColliders();
+        GenerateBarriers();
+        for (int x = 0; x != finalCitySize.x; x++)
+        {
+            for (int y = 0; y != finalCitySize.y; y++)
+            {
+                if (!grid[x, y].isOccupied)
+                {
+                    if (y < suburbanSize)
+                    {
+                        currentLevel = 0;
+                        GenerateSuburbanBlock(grid, x, y);
+                    }
+                    else if (y <= suburbanSize + suburbanDangerousSize)
+                    {
+                        currentLevel = 1;
+                        GenerateSuburbanBlock(grid, x, y);
+                    }
+                    else
+                    {
+                        currentLevel = 2;
+                        GenerateCityBlock(grid, x, y);
+                    }
+                }
+                if (x % 5 == 0 && y % 5 == 0)
+                {
+                    GenerateFloor(x, y);
+                }
+            }
+        }
     }
 
 #endif

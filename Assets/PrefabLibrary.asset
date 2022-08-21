@@ -70,3 +70,12 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 3198d3f2bc98b8b4a90648ab9c3af320, type: 2}
   - {fileID: 2100000, guid: 36d43dd0b556ab244a7a0a5e0a0f96d5, type: 2}
   barrierPrefab: {fileID: 5323292115209528380, guid: b0d7eca51d7129c40ae7cd8154753f8e, type: 3}
+  cityPrefab:
+  - {fileID: 8140240496408487541, guid: c69303fcd5d764a4e8f293c382e51616, type: 3}
+  - {fileID: 2150878329333289009, guid: 22c840db64fe23840a6302d8146a0b0c, type: 3}
+  - {fileID: 5441491325706672093, guid: 19a7fa7622a0fe9498910cab9400dbb3, type: 3}
+  - {fileID: 1861287566062888550, guid: f51f0a2207a9be14b9e40b68bf0a0a37, type: 3}
+  - {fileID: 9023845642848693706, guid: 0abae00b6e2c71e418b72aa3c94aa7ca, type: 3}
+  - {fileID: 6245582278684742215, guid: c542d589fa0ff4e45a443b8373fa01fe, type: 3}
+  cityFloorPrefab: {fileID: 6965118010420886735, guid: f01e8e2293dff8143ae8670c35bb3179, type: 3}
+  colliderPrefab: {fileID: 5323292115209528380, guid: fea631772da445742baf1599807d813a, type: 3}

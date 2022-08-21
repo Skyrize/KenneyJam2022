@@ -47,15 +47,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabLibrary: {fileID: 11400000, guid: 63669bfc2dada2e47afcf4b8a49a436d, type: 2}
   cellSize: 20
-  citySize: {x: 20, y: 20}
-  finalCitySize: {x: 0, y: 0}
+  worldSize: 5
+  suburbanSize: 20
+  suburbanDangerousSize: 20
+  citySize: 20
+  finalCitySize: {x: 15, y: 70}
   houseGenerator: {fileID: 8540663960472315116}
-  roadContainer: {fileID: 0}
-  floorContainer: {fileID: 0}
-  survivorContainer: {fileID: 0}
-  barrierContainer: {fileID: 0}
+  worldContainer: {fileID: 0}
   minSurvivorAmount: 0
   maxSurvivorAmount: 4
+  level1Prob: 6
+  level2Prob: 3
 --- !u!1 &8540663960472315115
 GameObject:
   m_ObjectHideFlags: 0
