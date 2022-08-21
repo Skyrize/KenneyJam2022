@@ -103,6 +103,12 @@ public class CityGenerator : Generator
         }
     }
 
+    void AddBarrier(int x, int y, int angle)
+    {
+
+    }
+
+    int blockSize = 5;
     void FillBasicBlock(Cell[,] grid, int x, int y)
     {
         Fill(grid, x, y, CellType.HOUSE);
@@ -110,17 +116,37 @@ public class CityGenerator : Generator
         Fill(grid, x, y+2, CellType.HOUSE);
         Fill(grid, x+2, y+2, CellType.HOUSE);
         
-        Fill(grid, x+4, y, CellType.ROAD_VERTICAL);
-        Fill(grid, x+4, y+1, CellType.ROAD_VERTICAL);
-        Fill(grid, x+4, y+2, CellType.ROAD_VERTICAL);
-        Fill(grid, x+4, y+3, CellType.ROAD_VERTICAL);
+        for (int i = 0; i != blockSize - 1; i++)
+        {
+            Fill(grid, x + blockSize - 1, y + i, CellType.ROAD_VERTICAL);
+        }
 
-        Fill(grid, x, y+4, CellType.ROAD_HORIZONTAL);
-        Fill(grid, x+1, y+4, CellType.ROAD_HORIZONTAL);
-        Fill(grid, x+2, y+4, CellType.ROAD_HORIZONTAL);
-        Fill(grid, x+3, y+4, CellType.ROAD_HORIZONTAL);
+        for (int i = 0; i != blockSize - 1; i++)
+        {
+            Fill(grid, x + i, y + blockSize - 1, CellType.ROAD_HORIZONTAL);
+        }
 
-        Fill(grid, x+4, y+4, CellType.ROAD_INTERSECT);
+        Fill(grid, x + blockSize - 1, y + blockSize - 1, CellType.ROAD_INTERSECT);
+
+        if (x == 0)
+        {
+            for (int i = 0; i != blockSize - 1; i++)
+            {
+                AddBarrier(x + i, y + blockSize - 1, 0);
+            }
+        }
+        if (y == 0)
+        {
+            
+        }
+        if (x == citySize.x - blockSize)
+        {
+
+        }
+        if (y == citySize.y - blockSize)
+        {
+            
+        }
     }
 
     void GenerateFloor(int x, int y)
@@ -166,6 +192,7 @@ public class CityGenerator : Generator
         if (!houseGenerator)
             throw new System.Exception("Missing house generator");
         Clean();
+        citySize = new Vector2Int(citySize.x + blockSize * 2, citySize.y + blockSize * 2);
         Cell[,] grid = new Cell[citySize.x, citySize.y];
         FillBasic(grid);
     }

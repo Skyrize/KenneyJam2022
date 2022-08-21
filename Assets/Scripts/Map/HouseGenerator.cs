@@ -35,6 +35,8 @@ public class HouseGenerator : Generator
         Material randomWallMat = prefabLibrary.wallMaterials[Random.Range(0, prefabLibrary.wallMaterials.Length)];
         Transform house = GenerateInRange(container, prefabLibrary.housePrefabs[randomPrefabIndex], placementRange, basePos);
         MeshRenderer meshRenderer = house.GetComponent<MeshRenderer>();
+        if (!meshRenderer)
+            meshRenderer = house.GetComponentInChildren<MeshRenderer>();
         Material[] materials = meshRenderer.sharedMaterials;
         for (int i = 0; i != materials.Length; i++)
         {
