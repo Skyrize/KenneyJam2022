@@ -66,6 +66,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 426c87f018f6dd24face3daef8fa3e2b, type: 3}
   m_PrefabInstance: {fileID: 4062242089387976765}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &3679716074863449604
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3791628987861652844}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!136 &-3665434746226190861
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -92,7 +108,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc965bc3e9abed34597529ce8e42e509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_height: 16
+  m_height: 15
+  m_survivorSpawnRadius: 5
+  m_nbSurvivorsInside: 0
 --- !u!114 &4490478033721800002
 MonoBehaviour:
   m_ObjectHideFlags: 0

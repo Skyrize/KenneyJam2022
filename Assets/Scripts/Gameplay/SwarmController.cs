@@ -32,7 +32,7 @@ public class SwarmController : MonoBehaviour
         m_zombies.Capacity = (int)m_initialSize;
         for (uint i = 0; i < m_initialSize; ++i)
         {
-            Vector2 spawnPosition2D = Random.insideUnitCircle * spawnRadius;
+            Vector2 spawnPosition2D = Random.insideUnitCircle * Random.Range(0.5f, spawnRadius);
             Vector3 spawnPosition = transform.position + new Vector3(spawnPosition2D.x, 0.0f, spawnPosition2D.y);
             GameObject zombie = GameManager.Instance.SpawnManager.SpawnZombie(spawnPosition, Quaternion.identity);
             AddZombie(zombie.GetComponent<ZombiController>());
