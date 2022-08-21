@@ -45,6 +45,10 @@ MonoBehaviour:
   - {fileID: 246141046710276238, guid: 9db6d6c6bd948de4fade7039021e5794, type: 3}
   - {fileID: 4014283884453661224, guid: b9759943c7794c145acd93f117c1be67, type: 3}
   - {fileID: 2134314687675773525, guid: 2dc20e23168fbdf4b8a772a4b4883d29, type: 3}
+  armedSurvivorPrefabs:
+  - {fileID: 942230455415985337, guid: 855540e2ad50a1845928caebd796deae, type: 3}
+  - {fileID: 942230455415985337, guid: 5546f48bc604ef149a0859d587a36e74, type: 3}
+  - {fileID: 942230455415985337, guid: 5d7d2407d845fd44287357434024419d, type: 3}
   roadPrefab: {fileID: 463733719428636602, guid: ebfae72d9f38c404eaaa98023f455863, type: 3}
   intersectRoadPrefab: {fileID: 9159804167809615826, guid: 76083e495aef9ce4ca8d1dd4f3a5a8c8, type: 3}
   floorPrefab: {fileID: 6965118010420886735, guid: 80a96802d01ef3e42abd3c3a0dff4b14, type: 3}

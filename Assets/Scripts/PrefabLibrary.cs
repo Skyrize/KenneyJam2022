@@ -10,6 +10,7 @@ public class PrefabLibrary : ScriptableObject
     public GameObject[] housePrefabs;
     public GameObject[] decorationPrefabs;
     public GameObject[] survivorPrefabs;
+    public GameObject[] armedSurvivorPrefabs;
     public GameObject roadPrefab;
     public GameObject intersectRoadPrefab;
     public GameObject floorPrefab;

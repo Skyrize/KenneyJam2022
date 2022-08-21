@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2082269285136456818}
   - component: {fileID: 8473636214681096710}
   - component: {fileID: 4791885138954143307}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Shadow Caster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
