@@ -11,6 +11,7 @@ public class SwarmController : MonoBehaviour
     [SerializeField] private float m_boostDuration = 3f;
     [SerializeField] private float m_boostRecoveryScale = 0.75f;
     [SerializeField] private UIFillBar m_boostBar;
+    [SerializeField] private TMPro.TextMeshProUGUI m_zombieCountText;
 
     private GameObject m_zombiePool;
     private List<ZombiController> m_zombies = new List<ZombiController>();
@@ -45,9 +46,12 @@ public class SwarmController : MonoBehaviour
         }
         m_boostTimer = m_boostDuration;
         UpdateBoost();
+
+        m_onSwarmSizeChanged.AddListener(UpdateCountText);
     }
 
-    private void Start() {
+    private void Start() 
+    {
         m_onSwarmSizeChanged.Invoke(m_zombies.Count);
     }
 
@@ -159,6 +163,12 @@ public class SwarmController : MonoBehaviour
             zombie.NearZombies.Remove(_zombie);
         UpdateSpeed();
         m_onSwarmSizeChanged.Invoke(m_zombies.Count);
+    }
+
+    private void UpdateCountText(int _count)
+    {
+        if (m_zombieCountText != null)
+            m_zombieCountText.text = Count.ToString();
     }
 
     private void OnDrawGizmos()
