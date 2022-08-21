@@ -14,14 +14,18 @@ public class ZombiController : MonoBehaviour
     [SerializeField] private AnimationCurve m_avoidanceCurve;
     [SerializeField] private float m_hitDamagePoints = 1.0f;
     [SerializeField] private float m_hitCooldownDuration = 1.0f;
+    [SerializeField] private AnimationCurve m_avoidanceRadiusSwarmSizeCurve;
 
     public SwarmController Swarm { get; set; }
+    public List<ZombiController> NearZombies { get => m_nearZombies; set => m_nearZombies = value; }
 
     private List<ZombiController> m_nearZombies = new List<ZombiController>(10);
     private Vector3 m_desiredVelocity;
     private Timer m_waitTimer = new Timer();
     private float m_waitDuration = 0.0f;
     private Timer m_hitCooldownTimer = new Timer();
+
+    public float AvoidanceRadiusMax => Swarm ? m_avoidanceRadiusSwarmSizeCurve.Evaluate(Swarm.Count) : 10; 
 
     public void Wait(float _duration)
     {
@@ -44,6 +48,8 @@ public class ZombiController : MonoBehaviour
             {
                 Vector3 heading = ComputeHeading();
                 Vector3 avoidance = ComputeAvoidance();
+                if (avoidance.sqrMagnitude <= 0.1f * 0.1f)
+                    avoidance = Vector3.zero;
                 UpdateVelocity(heading, avoidance);
             }
 
@@ -72,7 +78,7 @@ public class ZombiController : MonoBehaviour
             Vector3 deltaPos = transform.position - zombi.transform.position;
             deltaPos.y = 0.0f;
             float deltaNorm = deltaPos.magnitude;
-            float avoidanceFactor = m_avoidanceCurve.Evaluate(1 - (deltaNorm / m_avoidanceCollider.radius));
+            float avoidanceFactor = m_avoidanceCurve.Evaluate(1 - (deltaNorm / zombi.AvoidanceRadiusMax));
             if (avoidanceFactor > Mathf.Epsilon)
                 avoidance += deltaPos / deltaNorm * avoidanceFactor;
         }
@@ -141,6 +147,13 @@ public class ZombiController : MonoBehaviour
         if (!m_hitCooldownTimer.IsStarted || m_hitCooldownTimer.ElapsedTime > m_hitCooldownDuration)
         {
             {
+                SurvivorController survivor = _collision.gameObject.GetComponent<SurvivorController>();
+                if (survivor)
+                {
+                    survivor.Hit(this);
+                }
+            }
+            {
                 HealthComponent healthComponent = _collision.gameObject.GetComponent<HealthComponent>();
                 if (healthComponent)
                 {
@@ -152,13 +165,6 @@ public class ZombiController : MonoBehaviour
                     GameManager.Instance.AudioComponent.Play("Punch");
 
                     m_hitCooldownTimer.Restart();
-                }
-            }
-            {
-                SurvivorController survivor = _collision.gameObject.GetComponent<SurvivorController>();
-                if (survivor)
-                {
-                    survivor.Hit(this);
                 }
             }
         }

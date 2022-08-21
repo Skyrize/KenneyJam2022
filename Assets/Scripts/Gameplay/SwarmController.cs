@@ -16,11 +16,17 @@ public class SwarmController : MonoBehaviour
     private List<ZombiController> m_zombies = new List<ZombiController>();
     [HideInInspector] public UnityEvent<int> m_onSwarmSizeChanged = new UnityEvent<int>();
 
+    public int Count { get => m_zombies.Count; }
+
     float m_speed = 1;
     float m_boostSpeed = 1;
     bool m_isBoosting = false;
     float m_boostTimer = 0;
     public float Speed => m_isBoosting ? m_boostSpeed : m_speed;
+
+    private float m_perceptionUpdateFrequency = 0.5f;
+    private Timer m_perceptionUpdateTimer = new Timer();
+    
     private void Awake()
     {
         // Instantiate pool
@@ -80,6 +86,7 @@ public class SwarmController : MonoBehaviour
     {
         UpdateDisplacement();
         UpdateBoost();
+        UpdatePerceptions();
 
         if (Input.GetKeyDown(KeyCode.P))
         {
@@ -97,6 +104,43 @@ public class SwarmController : MonoBehaviour
     {
         m_speed = m_speedCurve.Evaluate(m_zombies.Count);
         m_boostSpeed = m_speed * m_boostScale;
+    }
+
+    public void UpdatePerceptions()
+    {
+        if (m_perceptionUpdateTimer.IsStarted && m_perceptionUpdateTimer.ElapsedTime <= m_perceptionUpdateFrequency)
+            return;
+
+        m_perceptionUpdateTimer.Restart();
+
+        foreach (ZombiController zombi in m_zombies)
+        {
+            zombi.NearZombies.Clear();
+        }
+
+        if (m_zombies.Count < 2)
+        {
+            return;
+        }
+
+        float distMax = m_zombies[0].AvoidanceRadiusMax;
+        float distMaxSqr = distMax * distMax;
+
+        for (int i = 0; i < m_zombies.Count - 1; ++i)
+        {
+            ZombiController zombi1 = m_zombies[i];
+
+            for (int j = i + 1; j < m_zombies.Count; ++j)
+            {
+                ZombiController zombi2 = m_zombies[j];
+
+                if ((zombi1.transform.position - zombi2.transform.position).sqrMagnitude <= distMaxSqr)
+                {
+                    zombi1.NearZombies.Add(zombi2);
+                    zombi2.NearZombies.Add(zombi1);
+                }
+            }
+        }
     }
 
     public void AddZombie(ZombiController _zombie)
