@@ -69,3 +69,4 @@ MonoBehaviour:
   - {fileID: 2100000, guid: a3a7dd2512ec877479b64e14dc229f47, type: 2}
   - {fileID: 2100000, guid: 3198d3f2bc98b8b4a90648ab9c3af320, type: 2}
   - {fileID: 2100000, guid: 36d43dd0b556ab244a7a0a5e0a0f96d5, type: 2}
+  barrierPrefab: {fileID: 5323292115209528380, guid: b0d7eca51d7129c40ae7cd8154753f8e, type: 3}

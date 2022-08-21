@@ -25,9 +25,12 @@ public class CityGenerator : Generator
 
     public float cellSize = 20;
     public Vector2Int citySize = new Vector2Int(20, 20);
+    public Vector2Int finalCitySize;
     public HouseGenerator houseGenerator;
-    public Transform roadContainer;
-    public Transform floorContainer;
+    Transform roadContainer;
+    Transform floorContainer;
+    Transform survivorContainer;
+    Transform barrierContainer;
     public int minSurvivorAmount = 0;
     public int maxSurvivorAmount = 4;
 
@@ -67,7 +70,7 @@ public class CityGenerator : Generator
         int randomSurvivorAmount = Random.Range(minSurvivorAmount, maxSurvivorAmount + 1);
         for (int i = 0; i != randomSurvivorAmount; i++)
         {
-            Transform generated = GenerateRandomInRange(roadContainer, prefabLibrary.survivorPrefabs, new Vector2(cellSize, cellSize), new Vector2(x * cellSize, y * cellSize));
+            Transform generated = GenerateRandomInRange(survivorContainer, prefabLibrary.survivorPrefabs, new Vector2(cellSize, cellSize), new Vector2(x * cellSize, y * cellSize));
             generated.eulerAngles = new Vector3(0, Random.Range(0, 359), 0);
         }
     }
@@ -103,9 +106,24 @@ public class CityGenerator : Generator
         }
     }
 
-    void AddBarrier(int x, int y, int angle)
+    void AddBarrier(int x, int y, int rotation)
     {
-
+        Transform barrier = (PrefabUtility.InstantiatePrefab(prefabLibrary.barrierPrefab, barrierContainer)as GameObject).transform;
+        float roadSize = cellSize;
+        barrier.position = transform.position + new Vector3(x * cellSize + roadSize / 2f, 0, y * cellSize + roadSize / 2f);
+        if (Random.Range(0, 2) == 0)
+        {
+            rotation += 180;
+        }
+        if (Random.Range(0, 2) == 0)
+        {
+            barrier.localScale = new Vector3(barrier.localScale.x, barrier.localScale.y, -1);
+        }
+        if (Random.Range(0, 2) == 0)
+        {
+            barrier.localScale = new Vector3(-1, barrier.localScale.y, barrier.localScale.z);
+        }
+        barrier.eulerAngles = new Vector3(0, rotation, 0);
     }
 
     int blockSize = 5;
@@ -128,23 +146,33 @@ public class CityGenerator : Generator
 
         Fill(grid, x + blockSize - 1, y + blockSize - 1, CellType.ROAD_INTERSECT);
 
-        if (x == 0)
+        if (x == 0) //Barriers left side of map
         {
-            for (int i = 0; i != blockSize - 1; i++)
+            for (int i = 0; i != blockSize; i++)
             {
-                AddBarrier(x + i, y + blockSize - 1, 0);
+                AddBarrier(x + blockSize - 1, y + i, 0);
             }
         }
-        if (y == 0)
+        if (y == 0) //Barriers down side of map
         {
-            
+            for (int i = 0; i != blockSize; i++)
+            {
+                AddBarrier(x + i, y + blockSize - 1, 90);
+            }
         }
-        if (x == citySize.x - blockSize)
+        if (x == finalCitySize.x - blockSize) //Barriers right side of map
         {
-
+            for (int i = 0; i != blockSize; i++)
+            {
+                AddBarrier(x - 1, y + i, 0);
+            }
         }
-        if (y == citySize.y - blockSize)
+        if (y == finalCitySize.y - blockSize) //Barriers up side of map
         {
+            for (int i = 0; i != blockSize; i++)
+            {
+                AddBarrier(x + i, y - 1, 90);
+            }
             
         }
     }
@@ -162,9 +190,9 @@ public class CityGenerator : Generator
 
     void FillBasic(Cell[,] grid)
     {
-        for (int x = 0; x != citySize.x; x++)
+        for (int x = 0; x != finalCitySize.x; x++)
         {
-            for (int y = 0; y != citySize.y; y++)
+            for (int y = 0; y != finalCitySize.y; y++)
             {
                 if (!grid[x, y].isOccupied)
                 {
@@ -180,10 +208,17 @@ public class CityGenerator : Generator
 
     public override void Clean()
     {
-        roadContainer.DestroyChilds();
-        floorContainer.DestroyChilds();
-        houseGenerator.Clean();
         houseGenerator.transform.position = transform.position;
+        if (roadContainer)
+            DestroyImmediate(roadContainer.gameObject);
+        if (floorContainer)
+            DestroyImmediate(floorContainer.gameObject);
+        if (survivorContainer)
+            DestroyImmediate(survivorContainer.gameObject);
+        if (barrierContainer)
+            DestroyImmediate(barrierContainer.gameObject);
+        if (houseGenerator.housesContainer)
+            DestroyImmediate(houseGenerator.housesContainer.gameObject);
     }
 
 
@@ -192,8 +227,24 @@ public class CityGenerator : Generator
         if (!houseGenerator)
             throw new System.Exception("Missing house generator");
         Clean();
-        citySize = new Vector2Int(citySize.x + blockSize * 2, citySize.y + blockSize * 2);
-        Cell[,] grid = new Cell[citySize.x, citySize.y];
+        roadContainer = new GameObject("roadContainer").transform;
+        roadContainer.transform.parent = transform;
+        roadContainer.transform.localPosition = Vector3.zero;
+        floorContainer = new GameObject("floorContainer").transform;
+        floorContainer.transform.parent = transform;
+        floorContainer.transform.localPosition = Vector3.zero;
+        survivorContainer = new GameObject("survivorContainer").transform;
+        survivorContainer.transform.parent = transform;
+        survivorContainer.transform.localPosition = Vector3.zero;
+        barrierContainer = new GameObject("barrierContainer").transform;
+        barrierContainer.transform.parent = transform;
+        barrierContainer.transform.localPosition = Vector3.zero;
+        houseGenerator.housesContainer = new GameObject("housesContainer").transform;
+        houseGenerator.housesContainer.transform.parent = transform;
+        houseGenerator.housesContainer.transform.localPosition = Vector3.zero;
+        
+        finalCitySize = new Vector2Int(citySize.x + blockSize * 2, citySize.y + blockSize * 2);
+        Cell[,] grid = new Cell[finalCitySize.x, finalCitySize.y];
         FillBasic(grid);
     }
 
