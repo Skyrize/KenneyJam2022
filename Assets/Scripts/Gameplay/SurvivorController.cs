@@ -90,6 +90,7 @@ public class ShootAction : SurvivorAction
 {
     public override Type m_type => Type.SHOOT;
     public Transform m_target;
+    public Timer m_timerDelay = new Timer();
     public override bool Process()
     {
         if (m_target == null)
@@ -108,8 +109,12 @@ public class ShootAction : SurvivorAction
             m_target = null;
             return true;
         }
+        
         m_controller.m_animator.SetBool("IsShooting", true);
-        m_controller.TryShoot(m_target, direction);
+
+        if (m_timerDelay.ElapsedTime >= 0.5f)
+            m_controller.TryShoot(m_target, direction);
+        
         return false;
     }
 }
@@ -256,6 +261,7 @@ public class TurretBehavior : Behavior
                 m_controller.m_animator.speed = 1f / m_controller.m_weapon.CooldownDuration;
                 m_currentAction = m_shootAction;
                 m_shootAction.m_target = detectedTarget;
+                m_shootAction.m_timerDelay.Restart();
             }
         }
         if (m_currentAction.Process())
@@ -306,7 +312,7 @@ public class SurvivorController : MonoBehaviour
     }
 
     Behavior m_currentBehavior;
-    bool canUpdateBehavior = true;
+    public bool canUpdateBehavior = true;
 
     public Transform DetectClosestTarget()
     {
@@ -351,26 +357,21 @@ public class SurvivorController : MonoBehaviour
         m_currentBehavior.Initialize(this);
     }
 
-    private void OnBecameVisible() {
-#if UNITY_EDITOR
-        if(Camera.current && Camera.current.name == "SceneCamera") return;
-#endif
-        canUpdateBehavior = true;
-    }
-
-    private void OnBecameInvisible() {
-        canUpdateBehavior = false;
-    }
-
-    private void Update() {
+    private void Update() 
+    {
         if (canUpdateBehavior)
-            m_currentBehavior.Update(); 
+            m_currentBehavior.Update();
+        else
+            m_desiredVelocity = Vector3.zero;
     }
 
     private void FixedUpdate()
     {
-        UpdateHit();
-        ApplyVelocity();
+        if (canUpdateBehavior)
+        {
+            UpdateHit();
+            ApplyVelocity();
+        }
     }
 
     private void UpdateHit()
