@@ -439,6 +439,7 @@ MonoBehaviour:
   m_angularSpeed: 50
   m_rigidBody: {fileID: 6560390935728187351}
   m_animator: {fileID: 5391910790307072408}
+  m_healthComponent: {fileID: 836940355292477014}
   m_avoidanceCollider: {fileID: 7186185333243994107}
   m_avoidanceCurve:
     serializedVersion: 2

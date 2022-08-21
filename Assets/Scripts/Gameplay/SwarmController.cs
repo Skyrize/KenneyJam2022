@@ -152,6 +152,13 @@ public class SwarmController : MonoBehaviour
         m_onSwarmSizeChanged.Invoke(m_zombies.Count);
     }
 
+    public void RemoveZombie(ZombiController _zombie)
+    {
+        m_zombies.Remove(_zombie);
+        UpdateSpeed();
+        m_onSwarmSizeChanged.Invoke(m_zombies.Count);
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
