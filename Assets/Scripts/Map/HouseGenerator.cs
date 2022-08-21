@@ -25,7 +25,6 @@ public class HouseGenerator : Generator
 
     public override void Clean()
     {
-        housesContainer.DestroyChilds();
     }
 
     Transform GenerateRandomHouseInRange(Transform container, Vector2 placementRange, Vector2 basePos)

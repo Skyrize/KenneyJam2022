@@ -18,4 +18,5 @@ public class PrefabLibrary : ScriptableObject
     public Material[] wallMaterials;
     public Material[] grassMaterials;
     public Material[] woodMaterials;
+    public GameObject barrierPrefab;
 }
