@@ -15,6 +15,7 @@ public class DestructibleComponent : MonoBehaviour
     private float m_shakeAmplitude = 0.0f;
     private float m_shakeAmplitudeMax = 0.5f;
     private List<GameObject> m_spawnedSurvivors;
+    private List<ParticleSystem> m_spawnedParticles;
     private bool m_destroyed = false;
 
     private void Awake()
@@ -55,6 +56,8 @@ public class DestructibleComponent : MonoBehaviour
 
                 gameObject.GetComponent<Rigidbody>().detectCollisions = false;
 
+                StopParticle();
+
                 Vector3 position = transform.position;
                 position.y = 0.4f;
                 transform.position = position;
@@ -79,7 +82,10 @@ public class DestructibleComponent : MonoBehaviour
 
         enabled = true;
         if (!m_shakeTimer.IsStarted)
+        {
             m_shakeTimer.Restart();
+            StartParticle();
+        }
         m_shakeDuration = m_shakeTimer.ElapsedTime + 0.1f;
         m_shakeAmplitude = Mathf.Min(m_shakeAmplitude + 0.01f, m_shakeAmplitudeMax);
     }
@@ -88,6 +94,11 @@ public class DestructibleComponent : MonoBehaviour
     {
         if (m_destroyed)
             return;
+
+        if (!m_shakeTimer.IsStarted)
+        {
+            StartParticle();
+        }
 
         enabled = true;
         m_shakeAmplitude = m_shakeAmplitudeMax;
@@ -108,5 +119,23 @@ public class DestructibleComponent : MonoBehaviour
             survivor.transform.position = spawnPosition;
             m_spawnedSurvivors.Add(survivor);
         }
+    }
+
+    private void StartParticle()
+    {
+        if (m_spawnedParticles == null)
+        {
+            m_spawnedParticles = new List<ParticleSystem>();
+            GameManager.Instance.SpawnManager.SpawnDestruction(gameObject, ref m_spawnedParticles);
+        }
+
+        foreach (ParticleSystem particleSystem in m_spawnedParticles)
+            particleSystem.Play();
+    }
+
+    private void StopParticle()
+    {
+        foreach (ParticleSystem particleSystem in m_spawnedParticles)
+            particleSystem.Stop();
     }
 }
