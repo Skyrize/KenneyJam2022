@@ -33,15 +33,12 @@ public class Weapon : MonoBehaviour
         m_muzzleFX.Emit(5);
         if (Physics.Raycast(m_spawnPoint.position, direction, out hit, 100, m_layerMask))
         {
-            Debug.Log("Hit" + hit.collider.gameObject.name);
             GameManager.Instance.SpawnManager.SpawnHit(hit.point);
             if (hit.collider.transform.parent.GetComponent<ZombiController>())
             {
                 hit.collider.transform.parent.GetComponent<HealthComponent>().ReduceHealth(m_damagePerRound);
             }
         }
-        else
-        Debug.Log("Not Hit");
         cooldownTimer = CooldownDuration;
     }
 }

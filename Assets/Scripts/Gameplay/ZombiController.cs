@@ -10,6 +10,7 @@ public class ZombiController : MonoBehaviour
     [SerializeField] private float m_angularSpeed = 2.0f;
     [SerializeField] private Rigidbody m_rigidBody;
     [SerializeField] private Animator m_animator;
+    [SerializeField] private HealthComponent m_healthComponent;
     [SerializeField] private SphereCollider m_avoidanceCollider;
     [SerializeField] private AnimationCurve m_avoidanceCurve;
     [SerializeField] private float m_hitDamagePoints = 1.0f;
@@ -31,6 +32,11 @@ public class ZombiController : MonoBehaviour
     {
         m_waitDuration = _duration;
         m_waitTimer.Restart();
+    }
+
+    private void Start()
+    {
+        m_healthComponent.onDeathEvent.AddListener(OnDeath);
     }
 
     private void Update()
@@ -168,5 +174,12 @@ public class ZombiController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void OnDeath()
+    {
+        Swarm.RemoveZombie(this);
+        GameManager.Instance.SpawnManager.SpawnPouf(transform.position);
+        Destroy(gameObject);
     }
 }

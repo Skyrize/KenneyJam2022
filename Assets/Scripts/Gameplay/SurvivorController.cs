@@ -40,6 +40,13 @@ public class FleeAction : SurvivorAction
     public Transform m_target;
     public override bool Process()
     {
+        if (m_target == null)
+        {
+            m_controller.m_desiredVelocity = Vector3.zero;
+            m_target = null;
+            return true;
+        }
+
         Vector3 direction = m_controller.transform.position - m_target.transform.position;
         if (direction.sqrMagnitude >= m_controller.m_securityRadius * m_controller.m_securityRadius)
         {
@@ -85,6 +92,14 @@ public class ShootAction : SurvivorAction
     public Transform m_target;
     public override bool Process()
     {
+        if (m_target == null)
+        {
+            m_controller.m_animator.SetBool("IsShooting", false);
+            m_controller.m_animator.speed = 1f;
+            m_target = null;
+            return true;
+        }
+
         Vector3 direction = m_controller.ComputeShootingDirection(m_target.transform.position);
         if (direction.sqrMagnitude >= m_controller.m_securityRadius * m_controller.m_securityRadius)
         {
@@ -341,11 +356,9 @@ public class SurvivorController : MonoBehaviour
         if(Camera.current && Camera.current.name == "SceneCamera") return;
 #endif
         canUpdateBehavior = true;
-        Debug.Log("Visible");
     }
 
     private void OnBecameInvisible() {
-        Debug.Log("Invisible");
         canUpdateBehavior = false;
     }
 
