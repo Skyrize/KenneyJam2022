@@ -90,6 +90,7 @@ public class ShootAction : SurvivorAction
 {
     public override Type m_type => Type.SHOOT;
     public Transform m_target;
+    public Timer m_timerDelay = new Timer();
     public override bool Process()
     {
         if (m_target == null)
@@ -101,15 +102,24 @@ public class ShootAction : SurvivorAction
         }
 
         Vector3 direction = m_controller.ComputeShootingDirection(m_target.transform.position);
-        if (direction.sqrMagnitude >= m_controller.m_securityRadius * m_controller.m_securityRadius)
+        float sqrDist = direction.sqrMagnitude;
+        if (sqrDist >= m_controller.m_detectionRadius * m_controller.m_detectionRadius)
         {
             m_controller.m_animator.SetBool("IsShooting", false);
             m_controller.m_animator.speed = 1f;
             m_target = null;
             return true;
         }
+        
         m_controller.m_animator.SetBool("IsShooting", true);
-        m_controller.TryShoot(m_target, direction);
+
+        Vector3 rotation = Vector3.RotateTowards(m_controller.transform.forward, direction, Time.deltaTime * m_controller.m_angularSpeed * 3, 0.0f);
+        rotation.y = m_controller.transform.position.y;
+        m_controller.m_rigidBody.rotation = Quaternion.LookRotation(rotation);
+
+        if (m_timerDelay.ElapsedTime >= 0.5f)
+            m_controller.TryShoot(m_target, direction);
+        
         return false;
     }
 }
@@ -256,6 +266,7 @@ public class TurretBehavior : Behavior
                 m_controller.m_animator.speed = 1f / m_controller.m_weapon.CooldownDuration;
                 m_currentAction = m_shootAction;
                 m_shootAction.m_target = detectedTarget;
+                m_shootAction.m_timerDelay.Restart();
             }
         }
         if (m_currentAction.Process())
@@ -281,12 +292,12 @@ public class TurretBehavior : Behavior
 public class SurvivorController : MonoBehaviour
 {
     [SerializeField] private HealthComponent m_healthComponent;
-    [SerializeField] private Rigidbody m_rigidBody;
+    [SerializeField] public Rigidbody m_rigidBody;
     [SerializeField] private Behavior.Type m_behavior;
-    [SerializeField] private float m_detectionRadius = 20f;
+    [SerializeField] public float m_detectionRadius = 20f;
     [SerializeField] public float m_securityRadius = 40f;
     [SerializeField] private LayerMask m_detectionMask;
-    [SerializeField] private float m_angularSpeed = 2.0f;
+    [SerializeField] public float m_angularSpeed = 2.0f;
     [SerializeField] private float m_minSpeed = 0.2f;
     [SerializeField] public Animator m_animator;
     [SerializeField] public Weapon m_weapon;
@@ -306,7 +317,7 @@ public class SurvivorController : MonoBehaviour
     }
 
     Behavior m_currentBehavior;
-    bool canUpdateBehavior = true;
+    public bool canUpdateBehavior = true;
 
     public Transform DetectClosestTarget()
     {
@@ -330,9 +341,6 @@ public class SurvivorController : MonoBehaviour
 
     public void TryShoot(Transform target, Vector3 direction)
     {
-        Vector3 rotation = Vector3.RotateTowards(transform.forward, direction, Time.deltaTime * m_angularSpeed * 3, 0.0f);
-        rotation.y = transform.position.y;
-        m_rigidBody.rotation = Quaternion.LookRotation(rotation);
         m_weapon.Shoot(direction);
     }
 
@@ -351,26 +359,21 @@ public class SurvivorController : MonoBehaviour
         m_currentBehavior.Initialize(this);
     }
 
-    private void OnBecameVisible() {
-#if UNITY_EDITOR
-        if(Camera.current && Camera.current.name == "SceneCamera") return;
-#endif
-        canUpdateBehavior = true;
-    }
-
-    private void OnBecameInvisible() {
-        canUpdateBehavior = false;
-    }
-
-    private void Update() {
+    private void Update() 
+    {
         if (canUpdateBehavior)
-            m_currentBehavior.Update(); 
+            m_currentBehavior.Update();
+        else
+            m_desiredVelocity = Vector3.zero;
     }
 
     private void FixedUpdate()
     {
-        UpdateHit();
-        ApplyVelocity();
+        if (canUpdateBehavior)
+        {
+            UpdateHit();
+            ApplyVelocity();
+        }
     }
 
     private void UpdateHit()

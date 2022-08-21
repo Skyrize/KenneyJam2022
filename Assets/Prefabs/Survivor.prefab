@@ -15,6 +15,12 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 80
       objectReference: {fileID: 0}
+    - target: {fileID: 4195542345659473477, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
+      propertyPath: m_WarningMessage
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are
+        already bound by a Humanoid avatar. These transforms can only be changed
+        by Humanoid clips.\n\tTransform 'LeftArm'\n\tFrom animation clip 'Survivor_Shoot'"
+      objectReference: {fileID: 0}
     - target: {fileID: 7412236166486130319, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -70,6 +76,24 @@ Rigidbody:
   m_CorrespondingSourceObject: {fileID: 3161901937012011018, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
   m_PrefabInstance: {fileID: 3121327592135371832}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1254429932150292927 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4195542345668963719, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
+  m_PrefabInstance: {fileID: 3121327592135371832}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8549651120554895408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254429932150292927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10089331d3a8ce47a1f6c962eb3c608, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_survivor: {fileID: 570098700160414405}
 --- !u!95 &1254429932159693437 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 4195542345659473477, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
@@ -96,15 +120,18 @@ MonoBehaviour:
   m_rigidBody: {fileID: 49675830097534002}
   m_behavior: 0
   m_detectionRadius: 20
+  m_securityRadius: 40
   m_detectionMask:
     serializedVersion: 2
     m_Bits: 128
   m_angularSpeed: 6
   m_minSpeed: 0.2
   m_animator: {fileID: 1254429932159693437}
+  m_weapon: {fileID: 0}
   m_runSpeed: 3
   m_walkSpeed: 1
   m_desiredVelocity: {x: 0, y: 0, z: 0}
+  canUpdateBehavior: 1
 --- !u!114 &5835354151103332842
 MonoBehaviour:
   m_ObjectHideFlags: 0

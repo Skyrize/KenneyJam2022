@@ -89,6 +89,10 @@ public class ZombiController : MonoBehaviour
                 avoidance += deltaPos / deltaNorm * avoidanceFactor;
         }
 
+        // Crappy failsafe
+        if (float.IsNaN(avoidance.x))
+            avoidance = Vector3.zero;
+
         return avoidance;
     }
 
