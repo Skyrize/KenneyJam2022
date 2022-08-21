@@ -537,5 +537,21 @@ PrefabInstance:
       propertyPath: housesContainer
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8540663960472315117, guid: a783a1dab71570048b554f1c19037b33, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540663960472315117, guid: a783a1dab71570048b554f1c19037b33, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540663960472315117, guid: a783a1dab71570048b554f1c19037b33, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540663960472315117, guid: a783a1dab71570048b554f1c19037b33, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a783a1dab71570048b554f1c19037b33, type: 3}
