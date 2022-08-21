@@ -84,7 +84,6 @@ public class DestructibleComponent : MonoBehaviour
         if (!m_shakeTimer.IsStarted)
         {
             m_shakeTimer.Restart();
-            StartParticle();
         }
         m_shakeDuration = m_shakeTimer.ElapsedTime + 0.1f;
         m_shakeAmplitude = Mathf.Min(m_shakeAmplitude + 0.01f, m_shakeAmplitudeMax);
@@ -95,13 +94,9 @@ public class DestructibleComponent : MonoBehaviour
         if (m_destroyed)
             return;
 
-        if (!m_shakeTimer.IsStarted)
-        {
-            StartParticle();
-        }
-
         enabled = true;
         m_shakeAmplitude = m_shakeAmplitudeMax;
+        StartParticle();
 
         Vector3 bodyCenter = GetComponent<Rigidbody>().centerOfMass;
         bodyCenter.y = 0.0f;
