@@ -29,6 +29,7 @@ public class Weapon : MonoBehaviour
     {
         if (cooldownTimer != 0)
             return;
+        GameManager.Instance.AudioComponent.Play("Shoot");
         RaycastHit hit;
         m_muzzleFX.Emit(5);
         if (Physics.Raycast(m_spawnPoint.position, direction, out hit, 100, m_layerMask))

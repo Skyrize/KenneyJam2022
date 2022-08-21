@@ -186,3 +186,10 @@ MonoBehaviour:
     minVolume: 1
     maxPitch: 1.1
     minPitch: 0.9
+  - name: Shoot
+    clip: {fileID: 8300000, guid: dc1a6821ae40d34459d81fe541b04f8c, type: 3}
+    loop: 0
+    maxVolume: 0.79
+    minVolume: 0.81
+    maxPitch: 1.1
+    minPitch: 0.9
