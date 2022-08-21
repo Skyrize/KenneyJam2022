@@ -79,3 +79,4 @@ MonoBehaviour:
   - {fileID: 6245582278684742215, guid: c542d589fa0ff4e45a443b8373fa01fe, type: 3}
   cityFloorPrefab: {fileID: 6965118010420886735, guid: f01e8e2293dff8143ae8670c35bb3179, type: 3}
   colliderPrefab: {fileID: 5323292115209528380, guid: fea631772da445742baf1599807d813a, type: 3}
+  landminePrefab: {fileID: 6238376860418312898, guid: ddee293c403701046946d1ef308045ac, type: 3}

@@ -41,6 +41,8 @@ public class CityGenerator : Generator
     public int maxSurvivorAmount = 4;
     public int level1Prob = 6;
     public int level2Prob = 3;
+    public int level1MineProb = 12;
+    public int level2MineProb = 8;
 
     void GenerateHouse(Cell[,] grid, int x, int y)
     {
@@ -93,6 +95,7 @@ public class CityGenerator : Generator
         if (x > blockSize - 2 && x < finalCitySize.x - blockSize + 1 && y > blockSize - 2 && y < finalCitySize.y - blockSize)
         {
             RandomGenerateSurvivor(road.position.x, road.position.z);
+            GenerateLandmine(road.position.x, road.position.z);
         }
     }
 
@@ -134,6 +137,24 @@ public class CityGenerator : Generator
         }
     }
 
+    void GenerateLandmine(float x, float y)
+    {
+        if (currentLevel == 0)
+        {
+            return;
+        }
+        if (currentLevel == 1 && Random.Range(0, level1MineProb) == 0)
+        {
+            Transform mine = GenerateInRange(roadContainer, prefabLibrary.landminePrefab, new Vector2(cellSize, cellSize), new Vector2(x, y));
+            mine.position += Vector3.up * 0.35f;
+        }
+        else if (currentLevel == 2 && Random.Range(0, level2MineProb) == 0)
+        {
+            Transform mine = GenerateInRange(roadContainer, prefabLibrary.landminePrefab, new Vector2(cellSize, cellSize), new Vector2(x, y));
+            mine.position += Vector3.up * 0.35f;
+        }
+    }
+
     void GenerateRoad(int rotation, Cell[,] grid, int x, int y)
     {
         Transform road = (PrefabUtility.InstantiatePrefab(prefabLibrary.roadPrefab, roadContainer)as GameObject).transform;
@@ -144,6 +165,7 @@ public class CityGenerator : Generator
         if (x > blockSize - 2 && x < finalCitySize.x - blockSize + 1 && y > blockSize - 2 && y < finalCitySize.y - blockSize)
         {
             RandomGenerateSurvivor(road.position.x, road.position.z);
+            GenerateLandmine(road.position.x, road.position.z);
         }
     }
 

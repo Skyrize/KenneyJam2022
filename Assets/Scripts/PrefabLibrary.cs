@@ -22,4 +22,5 @@ public class PrefabLibrary : ScriptableObject
     public GameObject[] cityPrefab;
     public GameObject cityFloorPrefab;
     public GameObject colliderPrefab;
+    public GameObject landminePrefab;
 }
