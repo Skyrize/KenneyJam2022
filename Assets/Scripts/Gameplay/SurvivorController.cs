@@ -13,6 +13,7 @@ public abstract class SurvivorAction
         CHASE,
         IDLE,
         DETECT,
+        SHOOT
     }
     public abstract Type m_type
     {
@@ -73,6 +74,27 @@ public class IdleAction : SurvivorAction
             return true;
         }
         m_timer -= Time.deltaTime;
+        return false;
+    }
+}
+
+[System.Serializable]
+public class ShootAction : SurvivorAction
+{
+    public override Type m_type => Type.SHOOT;
+    public Transform m_target;
+    public override bool Process()
+    {
+        Vector3 direction = m_controller.ComputeShootingDirection(m_target.transform.position);
+        if (direction.sqrMagnitude >= m_controller.m_securityRadius * m_controller.m_securityRadius)
+        {
+            m_controller.m_animator.SetBool("IsShooting", false);
+            m_controller.m_animator.speed = 1f;
+            m_target = null;
+            return true;
+        }
+        m_controller.m_animator.SetBool("IsShooting", true);
+        m_controller.TryShoot(m_target, direction);
         return false;
     }
 }
@@ -184,6 +206,63 @@ public class CowardBehavior : Behavior
     }
 }
 
+[System.Serializable]
+public class TurretBehavior : Behavior
+{
+    ShootAction m_shootAction = new ShootAction();
+    IdleAction m_idleAction = new IdleAction();
+    WanderAction m_wanderAction = new WanderAction();
+
+    void ChooseRandomBehavior()
+    {
+        int rand = Random.Range(0, 2);
+        if (rand == 0)
+            m_currentAction = m_idleAction;
+        else
+            m_currentAction = m_wanderAction;
+    }
+
+    public override void OnInitialize()
+    {
+        m_shootAction.Initialize(m_controller);
+        m_idleAction.Initialize(m_controller);
+        m_wanderAction.Initialize(m_controller);
+        ChooseRandomBehavior();
+    }
+
+    public override void Update()
+    {
+        if (!m_shootAction.m_target)
+        {
+            Transform detectedTarget = m_controller.DetectClosestTarget();
+            if (detectedTarget)
+            {
+                m_controller.m_desiredVelocity = Vector3.zero;
+                m_controller.m_animator.speed = 1f / m_controller.m_weapon.CooldownDuration;
+                m_currentAction = m_shootAction;
+                m_shootAction.m_target = detectedTarget;
+            }
+        }
+        if (m_currentAction.Process())
+        {
+            switch (m_currentAction.m_type)
+            {
+                case SurvivorAction.Type.WANDER:
+                    m_currentAction = m_idleAction;
+                break;
+                case SurvivorAction.Type.IDLE:
+                    m_currentAction = m_wanderAction;
+                break;
+                case SurvivorAction.Type.SHOOT:
+                    ChooseRandomBehavior();
+                break;
+                default:
+                break;
+            }
+        }
+    }
+}
+
 public class SurvivorController : MonoBehaviour
 {
 
@@ -195,7 +274,8 @@ public class SurvivorController : MonoBehaviour
     [SerializeField] private LayerMask m_detectionMask;
     [SerializeField] private float m_angularSpeed = 2.0f;
     [SerializeField] private float m_minSpeed = 0.2f;
-    [SerializeField] private Animator m_animator;
+    [SerializeField] public Animator m_animator;
+    [SerializeField] public Weapon m_weapon;
     public float m_runSpeed = 3;
     public float m_walkSpeed = 1;
 
@@ -228,18 +308,32 @@ public class SurvivorController : MonoBehaviour
         return targetDetected;
     }
 
+    public Vector3 ComputeShootingDirection(Vector3 targetPoint)
+    {
+        return targetPoint - m_weapon.m_spawnPoint.position;
+    }
+
+    public void TryShoot(Transform target, Vector3 direction)
+    {
+        Vector3 rotation = Vector3.RotateTowards(transform.forward, direction, Time.deltaTime * m_angularSpeed * 3, 0.0f);
+        rotation.y = transform.position.y;
+        m_rigidBody.rotation = Quaternion.LookRotation(rotation);
+        m_weapon.Shoot(direction);
+    }
+
     private void Awake() {
         switch (m_behavior)
         {
             case Behavior.Type.COWARD:
                 m_currentBehavior = new CowardBehavior();
-                m_currentBehavior.Initialize(this);
             break;
             case Behavior.Type.WARRIOR:
             break;
             case Behavior.Type.TURRET:
+                m_currentBehavior = new TurretBehavior();
             break;
         }
+        m_currentBehavior.Initialize(this);
     }
 
     private void OnBecameVisible() {
