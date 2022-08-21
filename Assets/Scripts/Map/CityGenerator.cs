@@ -206,19 +206,23 @@ public class CityGenerator : Generator
         }
     }
 
+    public void CleanTarget(string targetName)
+    {
+        Transform target = transform.Find(targetName);
+        if (target)
+        {
+            DestroyImmediate(target.gameObject);
+        }
+    }
+
     public override void Clean()
     {
         houseGenerator.transform.position = transform.position;
-        if (roadContainer)
-            DestroyImmediate(roadContainer.gameObject);
-        if (floorContainer)
-            DestroyImmediate(floorContainer.gameObject);
-        if (survivorContainer)
-            DestroyImmediate(survivorContainer.gameObject);
-        if (barrierContainer)
-            DestroyImmediate(barrierContainer.gameObject);
-        if (houseGenerator.housesContainer)
-            DestroyImmediate(houseGenerator.housesContainer.gameObject);
+        CleanTarget("floorContainer");
+        CleanTarget("survivorContainer");
+        CleanTarget("barrierContainer");
+        CleanTarget("housesContainer");
+        CleanTarget("roadContainer");
     }
 
 

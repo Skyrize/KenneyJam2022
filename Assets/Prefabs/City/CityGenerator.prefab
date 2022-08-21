@@ -48,6 +48,7 @@ MonoBehaviour:
   prefabLibrary: {fileID: 11400000, guid: 63669bfc2dada2e47afcf4b8a49a436d, type: 2}
   cellSize: 20
   citySize: {x: 20, y: 20}
+  finalCitySize: {x: 0, y: 0}
   houseGenerator: {fileID: 8540663960472315116}
   roadContainer: {fileID: 0}
   floorContainer: {fileID: 0}
@@ -79,7 +80,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8540663960472315115}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

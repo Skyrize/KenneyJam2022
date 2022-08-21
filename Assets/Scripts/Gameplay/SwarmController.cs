@@ -15,6 +15,7 @@ public class SwarmController : MonoBehaviour
     private GameObject m_zombiePool;
     private List<ZombiController> m_zombies = new List<ZombiController>();
     [HideInInspector] public UnityEvent<int> m_onSwarmSizeChanged = new UnityEvent<int>();
+    Rigidbody rb;
 
     public int Count { get => m_zombies.Count; }
 
@@ -29,6 +30,7 @@ public class SwarmController : MonoBehaviour
     
     private void Awake()
     {
+        rb = GetComponent<Rigidbody>();
         // Instantiate pool
         m_zombiePool = new GameObject();
         m_zombiePool.name = "Zombie Pool";
@@ -58,7 +60,7 @@ public class SwarmController : MonoBehaviour
             0.0f,
             Input.GetAxis("Vertical"));
 
-        transform.position = transform.position + displacement * Time.deltaTime * Speed;
+        rb.velocity = displacement.normalized * Speed;
     }
 
     private void UpdateBoost()
