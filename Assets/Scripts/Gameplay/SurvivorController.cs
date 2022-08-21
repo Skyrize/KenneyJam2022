@@ -39,7 +39,14 @@ public class FleeAction : SurvivorAction
     public Transform m_target;
     public override bool Process()
     {
-        m_controller.m_desiredVelocity = (m_controller.transform.position - m_target.transform.position).normalized * m_controller.m_runSpeed;
+        Vector3 direction = m_controller.transform.position - m_target.transform.position;
+        if (direction.sqrMagnitude >= m_controller.m_securityRadius * m_controller.m_securityRadius)
+        {
+            m_controller.m_desiredVelocity = Vector3.zero;
+            m_target = null;
+            return true;
+        }
+        m_controller.m_desiredVelocity = direction.normalized * m_controller.m_runSpeed;
         return false;
     }
 }
@@ -48,8 +55,24 @@ public class FleeAction : SurvivorAction
 public class IdleAction : SurvivorAction
 {
     public override Type m_type => Type.IDLE;
+    float m_randomRange = 0.5f;
+    float m_duration = 4f;
+    float m_timer = 2;
+    bool m_started = false;
     public override bool Process()
     {
+        if (!m_started)
+        {
+            m_started = true;
+            m_timer = Random.Range(m_duration - m_randomRange, m_duration + m_randomRange);
+            m_controller.m_desiredVelocity = Vector3.zero;
+        }
+        if (m_timer <= 0)
+        {
+            m_started = false;
+            return true;
+        }
+        m_timer -= Time.deltaTime;
         return false;
     }
 }
@@ -57,9 +80,26 @@ public class IdleAction : SurvivorAction
 [System.Serializable]
 public class WanderAction : SurvivorAction
 {
-    public override Type m_type => Type.FLEE;
+    public override Type m_type => Type.WANDER;
+    float m_randomRange = 0.5f;
+    float m_duration = 3f;
+    float m_timer = 0;
+    bool m_started = false;
     public override bool Process()
     {
+        if (!m_started)
+        {
+            m_started = true;
+            Vector2 randomDir = Random.insideUnitCircle.normalized;
+            m_controller.m_desiredVelocity = new Vector3(randomDir.x, 0, randomDir.y) * m_controller.m_walkSpeed;
+            m_timer = Random.Range(m_duration - m_randomRange, m_duration + m_randomRange);
+        }
+        if (m_timer <= 0)
+        {
+            m_started = false;
+            return true;
+        }
+        m_timer -= Time.deltaTime;
         return false;
     }
 }
@@ -96,16 +136,21 @@ public class CowardBehavior : Behavior
     IdleAction m_idleAction = new IdleAction();
     WanderAction m_wanderAction = new WanderAction();
 
-    public override void OnInitialize()
+    void ChooseRandomBehavior()
     {
         int rand = Random.Range(0, 2);
         if (rand == 0)
             m_currentAction = m_idleAction;
         else
             m_currentAction = m_wanderAction;
+    }
+
+    public override void OnInitialize()
+    {
         m_fleeAction.Initialize(m_controller);
         m_idleAction.Initialize(m_controller);
         m_wanderAction.Initialize(m_controller);
+        ChooseRandomBehavior();
     }
 
     public override void Update()
@@ -124,8 +169,13 @@ public class CowardBehavior : Behavior
             switch (m_currentAction.m_type)
             {
                 case SurvivorAction.Type.WANDER:
+                    m_currentAction = m_idleAction;
                 break;
                 case SurvivorAction.Type.IDLE:
+                    m_currentAction = m_wanderAction;
+                break;
+                case SurvivorAction.Type.FLEE:
+                    ChooseRandomBehavior();
                 break;
                 default:
                 break;
@@ -141,6 +191,7 @@ public class SurvivorController : MonoBehaviour
     [SerializeField] private Rigidbody m_rigidBody;
     [SerializeField] private Behavior.Type m_behavior;
     [SerializeField] private float m_detectionRadius = 20f;
+    [SerializeField] public float m_securityRadius = 40f;
     [SerializeField] private LayerMask m_detectionMask;
     [SerializeField] private float m_angularSpeed = 2.0f;
     [SerializeField] private float m_minSpeed = 0.2f;
@@ -192,10 +243,15 @@ public class SurvivorController : MonoBehaviour
     }
 
     private void OnBecameVisible() {
+#if UNITY_EDITOR
+        if(Camera.current && Camera.current.name == "SceneCamera") return;
+#endif
         canUpdateBehavior = true;
+        Debug.Log("Visible");
     }
 
     private void OnBecameInvisible() {
+        Debug.Log("Invisible");
         canUpdateBehavior = false;
     }
 
