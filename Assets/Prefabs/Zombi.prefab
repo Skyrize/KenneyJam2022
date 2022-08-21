@@ -41,7 +41,7 @@ SphereCollider:
   m_GameObject: {fileID: 8618960869981673119}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
@@ -52,9 +52,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2082269285136456818, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3161901937012011018, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
       propertyPath: m_Mass
       value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 4195542345659473477, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4195542345659473477, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
       propertyPath: m_Controller
@@ -400,7 +408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab5b4e346cb4efc44be43b8fe97a73ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 12
+  m_baseSpeed: 2
   m_minSpeed: 0.2
   m_angularSpeed: 50
   m_rigidBody: {fileID: 6560390935728187351}
@@ -432,6 +440,30 @@ MonoBehaviour:
     m_RotationOrder: 4
   m_hitDamagePoints: 1
   m_hitCooldownDuration: 1
+  m_avoidanceRadiusSwarmSizeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 6
+      inSlope: 0.014321533
+      outSlope: 0.008
+      tangentMode: 65
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.05377468
+    - serializedVersion: 3
+      time: 1000
+      value: 14
+      inSlope: 0.008
+      outSlope: 0
+      tangentMode: 5
+      weightedMode: 0
+      inWeight: 0.11080975
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!95 &5391910790307072408 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 4195542345659473477, guid: fb1de69bf1776dd4cad67825d00e158c, type: 3}
