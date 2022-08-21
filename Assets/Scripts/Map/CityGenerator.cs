@@ -44,10 +44,16 @@ public class CityGenerator : Generator
 
     void GenerateHouse(Cell[,] grid, int x, int y)
     {
-        float houseSize = cellSize * 2;
-        houseGenerator.transform.position = transform.position + new Vector3(x * cellSize + houseSize / 2f, 0, y * cellSize + houseSize / 2f);
-        int randomOrientation = Random.Range(0, 3);
-        houseGenerator.transform.rotation = Quaternion.Euler(0, randomOrientation * 90, 0);
+        if (x > blockSize - 1 && x < finalCitySize.x - blockSize && y > blockSize - 1 && y < finalCitySize.y - blockSize)
+        {
+            Debug.Log("Generate House" +  x + "///" +  y);
+            float houseSize = cellSize * 2;
+            houseGenerator.transform.position = transform.position + new Vector3(x * cellSize + houseSize / 2f, 0, y * cellSize + houseSize / 2f);
+            int randomOrientation = Random.Range(0, 3);
+            houseGenerator.transform.rotation = Quaternion.Euler(0, randomOrientation * 90, 0);
+
+            houseGenerator.Generate();
+        }
         grid[x, y].isOccupied = true;
         
         grid[x+1, y].isOccupied = true;
@@ -55,19 +61,20 @@ public class CityGenerator : Generator
         grid[x, y+1].isOccupied = true;
         
         grid[x+1, y+1].isOccupied = true;
-
-        houseGenerator.Generate();
     }
     
     void GenerateCity(Cell[,] grid, int x, int y)
     {
         //TODO : city placement
-        float citySize = cellSize * 2;
-        int randomPrefabIndex = Random.Range(0, prefabLibrary.cityPrefab.Length);
-        Transform city = (PrefabUtility.InstantiatePrefab(prefabLibrary.cityPrefab[randomPrefabIndex], cityContainer)as GameObject).transform;
-        city.transform.position = transform.position + new Vector3(x * cellSize + citySize / 2f, 0, y * cellSize + citySize / 2f);
-        int randomOrientation = Random.Range(0, 3);
-        city.transform.rotation = Quaternion.Euler(0, randomOrientation * 90, 0);
+        if (x > blockSize - 1 && x < finalCitySize.x - blockSize && y > blockSize - 1 && y < finalCitySize.y - blockSize)
+        {
+            float citySize = cellSize * 2;
+            int randomPrefabIndex = Random.Range(0, prefabLibrary.cityPrefab.Length);
+            Transform city = (PrefabUtility.InstantiatePrefab(prefabLibrary.cityPrefab[randomPrefabIndex], cityContainer)as GameObject).transform;
+            city.transform.position = transform.position + new Vector3(x * cellSize + citySize / 2f, 0, y * cellSize + citySize / 2f);
+            int randomOrientation = Random.Range(0, 3);
+            city.transform.rotation = Quaternion.Euler(0, randomOrientation * 90, 0);
+        }
         grid[x, y].isOccupied = true;
         
         grid[x+1, y].isOccupied = true;
@@ -83,7 +90,10 @@ public class CityGenerator : Generator
         float intersectionSize = cellSize;
         road.position = transform.position + new Vector3(x * cellSize + intersectionSize / 2f, 0, y * cellSize + intersectionSize / 2f);
         grid[x, y].isOccupied = true;
-        RandomGenerateSurvivor(road.position.x, road.position.z);
+        if (x > blockSize - 2 && x < finalCitySize.x - blockSize + 1 && y > blockSize - 2 && y < finalCitySize.y - blockSize)
+        {
+            RandomGenerateSurvivor(road.position.x, road.position.z);
+        }
     }
 
     int currentLevel = 0;
@@ -131,7 +141,10 @@ public class CityGenerator : Generator
         road.position = transform.position + new Vector3(x * cellSize + roadSize / 2f, 0, y * cellSize + roadSize / 2f);
         road.eulerAngles = new Vector3(0, rotation, 0);
         grid[x, y].isOccupied = true;
-        RandomGenerateSurvivor(road.position.x, road.position.z);
+        if (x > blockSize - 2 && x < finalCitySize.x - blockSize + 1 && y > blockSize - 2 && y < finalCitySize.y - blockSize)
+        {
+            RandomGenerateSurvivor(road.position.x, road.position.z);
+        }
     }
 
     void Generate(Cell[,] grid, int x, int y, CellType cellType)
@@ -181,6 +194,7 @@ public class CityGenerator : Generator
     int blockSize = 5;
     void GenerateSuburbanBlock(Cell[,] grid, int x, int y)
     {
+        GenerateFloor(x, y);
         Generate(grid, x, y, CellType.HOUSE);
         Generate(grid, x+2, y, CellType.HOUSE);
         Generate(grid, x, y+2, CellType.HOUSE);
@@ -201,6 +215,7 @@ public class CityGenerator : Generator
     
     void GenerateCityBlock(Cell[,] grid, int x, int y)
     {
+        GenerateCityFloor(x, y);
         Generate(grid, x, y, CellType.CITY);
         Generate(grid, x+2, y, CellType.CITY);
         Generate(grid, x, y+2, CellType.CITY);
@@ -244,6 +259,12 @@ public class CityGenerator : Generator
         meshRenderer.sharedMaterials = materials;
     }
 
+    void GenerateCityFloor(int x, int y)
+    {
+        Transform floor = (PrefabUtility.InstantiatePrefab(prefabLibrary.cityFloorPrefab, floorContainer)as GameObject).transform;
+        floor.position = transform.position + new Vector3(x*cellSize+cellSize*2.5f, 0, y*cellSize+cellSize*2.5f);
+    }
+
     public void CleanTarget(string targetName)
     {
         Transform target = transform.Find(targetName);
@@ -267,16 +288,16 @@ public class CityGenerator : Generator
         collider.position = transform.position + new Vector3(x * cellSize + roadSize / 2f, 0, y * cellSize + roadSize / 2f);
         collider.eulerAngles = new Vector3(0, rotation, 0);
         BoxCollider box = collider.GetComponent<BoxCollider>();
-        box.size = new Vector3(finalCitySize.x * cellSize * 2, box.size.y, box.size.z);
+        box.size = new Vector3(box.size.x, box.size.y, finalCitySize.y * cellSize);
     }
 
     void GenerateMapColliders()
     {
-        GenerateMapCollider(finalCitySize.x / 2, blockSize, 0); // bottom 
-        GenerateMapCollider(finalCitySize.x / 2, finalCitySize.y - blockSize, 0); // top
+        GenerateMapCollider(finalCitySize.x / 2, blockSize - 1, 90); // bottom 
+        GenerateMapCollider(finalCitySize.x / 2, finalCitySize.y - blockSize - 1, 90); // top
         
-        GenerateMapCollider(blockSize, finalCitySize.y / 2, 90); // left 
-        GenerateMapCollider(finalCitySize.y - blockSize - 1, finalCitySize.y / 2, 90); // right
+        GenerateMapCollider(blockSize - 1, finalCitySize.y / 2, 0); // left 
+        GenerateMapCollider(finalCitySize.x - blockSize - 1, finalCitySize.y / 2, 0); // right
     }
 
     public override void Generate()
@@ -334,10 +355,6 @@ public class CityGenerator : Generator
                         currentLevel = 2;
                         GenerateCityBlock(grid, x, y);
                     }
-                }
-                if (x % 5 == 0 && y % 5 == 0)
-                {
-                    GenerateFloor(x, y);
                 }
             }
         }
